@@ -36,6 +36,7 @@ npm run build  # 本番ビルド
 
 - 仕様: [SERVICE_SPEC.md](./SERVICE_SPEC.md)
 - 技術メモ: [CLAUDE.md](./CLAUDE.md)
+- Firebase セットアップ: [docs/FIREBASE_SETUP.md](./docs/FIREBASE_SETUP.md)
 
 ## License
 

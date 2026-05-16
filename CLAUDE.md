@@ -51,6 +51,7 @@ npm run deploy # GitHub Pages へデプロイ（後日設定）
   - `events/{eventId}` の read は全員許可
   - write は PINハッシュ照合 or 運営者カスタムクレーム必須
   - 詳細は `firestore.rules` 参照
+- **セットアップ手順**: [docs/FIREBASE_SETUP.md](./docs/FIREBASE_SETUP.md)
 
 ## リポジトリ
 
