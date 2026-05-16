@@ -1,0 +1,18 @@
+{
+  "name": "school-live-board",
+  "version": "0.1.0",
+  "private": true,
+  "description": "学校の運動会・文化祭で「今どのプログラムが進行中か」を全端末リアルタイム同期で大画面表示するアプリ",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "author": "AppTalentHub Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsubasagit/school-live-board.git"
+  }
+}

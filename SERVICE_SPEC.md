@@ -1,0 +1,115 @@
+# school-live-board - サービス仕様書
+
+## 1. サービス概要
+- **一言で**: 学校の運動会・文化祭で「今どのプログラムが進行中か」を全端末リアルタイム同期で大画面表示するアプリ
+- **対象ユーザー**:
+  - 運営者: 教員・実行委員（プログラム切替・編集を行う）
+  - 視聴者: 体育館の大型スクリーン・各教室モニタ・来場した保護者のスマホ
+- **解決する課題**:
+  - プログラムが今どこまで進んでいるかが体育館後方や別棟から分からない
+  - アナウンスだけだと聞き逃す保護者・生徒が多い
+  - 紙のしおりはリアルタイムの遅れ・前倒しに追従できない
+- **ステータス**: MVP（v0.1.0-alpha、2026-05-16 キックオフ）
+- **派生元**: [tsubasagit/yakyuu-hito](https://github.com/tsubasagit/yakyuu-hito) の操作画面・表示画面分離構成と Zustand 状態管理を流用。同期レイヤは BroadcastChannel API → Firebase Firestore `onSnapshot` に差し替え
+
+## 2. ユーザーロールと権限
+| ロール | できること |
+|---|---|
+| 運営者（教員・実行委員） | `/#/control` でプログラム編集・現在進行中プログラムの切替。簡易PIN認証 |
+| 視聴者 | `/#/display` を見るだけ（認証不要、URL/QR共有でアクセス） |
+
+## 3. 機能一覧
+
+### MVP（v0.1.0）
+- [ ] プログラム一覧の CRUD（順序・タイトル・説明・場所・予定時刻）
+- [ ] 現在進行中プログラムの切替（「次へ」「前へ」「指定」）
+- [ ] 全端末リアルタイム同期（Firestore `onSnapshot`）
+- [ ] 表示画面のフルスクリーン対応（大画面・スマホ縦横両対応）
+- [ ] 運営者PIN認証（4桁、localStorage 保存）
+- [ ] CSVインポート（プログラム一覧の一括登録）
+- [ ] イベント種別（運動会 / 文化祭 / 汎用）に応じた表示テンプレ切替
+
+### v0.2 以降（候補）
+- [ ] 次プログラムのプレビュー表示
+- [ ] 経過時間・予定時刻からの遅延表示
+- [ ] お知らせ差込（「昼休憩」「中断」「再開」等）
+- [ ] チーム得点表示（運動会モード）
+- [ ] 場所別フィルタ（文化祭モード）
+- [ ] QRコード生成（視聴者誘導用）
+
+## 4. 画面一覧
+| 画面 | パス | 対象ロール | 概要 |
+|---|---|---|---|
+| ホーム | `/` | 全員 | プロジェクト説明・control/display へのリンク・QR表示 |
+| 操作画面 | `/#/control` | 運営者 | プログラム編集・現在位置切替。PIN認証必須 |
+| 表示画面 | `/#/display` | 視聴者 | 現在のプログラムをフルスクリーン表示。Firestore購読 |
+
+## 5. データモデル
+
+### Firestore コレクション設計
+
+```
+events/{eventId}                          // 学校行事1回分
+  - title: string                          // "○○小学校 運動会 2026"
+  - eventType: "sports_day" | "culture_festival" | "generic"
+  - startDate: timestamp
+  - createdAt: timestamp
+  - pinHash: string                        // 運営者PINのハッシュ
+
+events/{eventId}/programs/{programId}     // プログラム一覧
+  - order: number                          // 番号（1, 2, 3...）
+  - title: string                          // "100m走 5年生男子" / "吹奏楽部 演奏"
+  - description: string                    // 補足説明
+  - location: string                       // "校庭" / "体育館" / "音楽室"
+  - scheduledStart: timestamp
+  - scheduledEnd: timestamp
+  - status: "upcoming" | "current" | "done"
+
+events/{eventId}/state/current             // 現在状態（単一ドキュメント）
+  - currentProgramId: string | null
+  - updatedAt: timestamp
+  - updatedBy: string                      // 運営者識別（任意）
+```
+
+### Zustand store
+
+- `EventStore` — 現在のイベント情報・eventId
+- `ProgramsStore` — プログラム一覧（Firestore購読でリアルタイム反映）
+- `CurrentStore` — 現在進行中プログラムID（state/current 購読）
+- `UIStore` — 表示テーマ・モード（運動会/文化祭/汎用）
+
+## 6. 外部連携
+- **ホスティング**: GitHub Pages（`tsubasagit.github.io/school-live-board/`）
+- **DB**: Firebase Firestore（リアルタイム同期）
+- **認証**: 運営者PIN（Firestore上のハッシュ比較、Firebase Auth は使わない軽量構成）
+- **画像/QR**: クライアントサイド生成（`qrcode` ライブラリ）
+
+## 7. ビジネスルール
+- **同期遅延目標**: 操作から全端末反映まで 2秒以内
+- **オフライン挙動**: 視聴者端末はオフラインでも最後に取得した状態を表示（PWA対応は v0.2以降）
+- **PIN認証**: 4桁数字、Firestore に bcrypt or SHA-256 ハッシュで保存。誤入力5回でロックは不要（学校行事のため）
+- **個人情報**: プログラム名に生徒個人名を含めない運用推奨（仕様書に明記）
+- **コスト**: 1イベント1日 / 視聴者500名 / 同期1イベントあたり数千回程度を想定。Firebase無料枠（Sparkプラン）で完結する設計
+
+## 8. 非機能要件
+- **想定ユーザー数**: 同時視聴500端末（中規模小中学校）
+- **パフォーマンス**: 表示画面は60fps、テキスト主体で軽量
+- **レスポンシブ**: 大画面（1920x1080以上）・タブレット・スマホ縦横すべて対応
+- **セキュリティ**: Firestoreセキュリティルールで read=全員許可、write=PINハッシュ一致時のみ
+- **アクセシビリティ**: 高コントラスト、フォントサイズ大、色覚多様性配慮
+
+## 9. 既知の課題・制限
+- GitHub Pages 配信のため Firebase 設定キーはクライアント側に露出する前提 → セキュリティルールで保護必須
+- Firestoreの無料枠を超える場合の課金リスク（運用前にイベント終了後の状態リセットスクリプト必要）
+- 大規模校（1000名超）での同時購読は要負荷検証
+
+## 10. 更新履歴
+| 日付 | 内容 |
+|---|---|
+| 2026-05-16 | 初版作成。yakyuu-hito からの派生方針を確定 |
+
+---
+
+## 関連ドキュメント
+- 派生元: [tsubasagit/yakyuu-hito](https://github.com/tsubasagit/yakyuu-hito)
+- 技術メモ: `CLAUDE.md`
