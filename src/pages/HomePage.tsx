@@ -22,20 +22,31 @@ export default function HomePage() {
   const base = import.meta.env.BASE_URL
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
+      <section className="bg-gradient-to-b from-[#eef5fa] to-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-6">
+          <header className="text-center space-y-3">
+            <div className="flex items-center justify-center gap-3">
+              <img
+                src={`${base}brand/rapittokun.png`}
+                alt="ラピットくん"
+                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover shadow-sm border border-slate-200 shrink-0"
+              />
+              <h1 className="text-3xl md:text-5xl font-bold text-slate-800">live-board</h1>
+            </div>
+            <p className="text-slate-600 text-base md:text-xl">
+              「いま何番／何が進行中か」を<span className="text-[#538bb0] font-semibold">全端末リアルタイム同期</span>で大画面表示
+            </p>
+          </header>
+          <img
+            src={`${base}og/hero-parents.png`}
+            alt="体育館で運動会を観覧する保護者たち。手元のスマホと正面の大型スクリーンに同じ「かけっこ」プログラムが同時に表示されている"
+            className="w-full rounded-lg shadow-md border border-slate-200"
+            loading="eager"
+          />
+        </div>
+      </section>
+
       <div className="flex-1 max-w-3xl w-full mx-auto p-8 space-y-8">
-        <header className="text-center space-y-3">
-          <div className="flex items-center justify-center gap-3">
-            <img
-              src={`${base}brand/rapittokun.png`}
-              alt="ラピットくん"
-              className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover shadow-sm border border-slate-200 shrink-0"
-            />
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-800">live-board</h1>
-          </div>
-          <p className="text-slate-500 text-sm md:text-base">
-            「いま何番／何が進行中か」を全端末リアルタイム同期で大画面表示
-          </p>
-        </header>
 
         {!isFirebaseConfigured && (
           <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 text-sm text-amber-800">
@@ -120,11 +131,17 @@ export default function HomePage() {
 
       <section className="bg-slate-50 border-t border-slate-200 py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 space-y-10">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800">アプリの使い方</h2>
             <p className="text-sm md:text-base text-slate-500">
               運営者は1台で操作、視聴者は何台でも同時に同じ画面が見られます
             </p>
+            <img
+              src={`${base}og/sync-devices.png`}
+              alt="大型テレビ・タブレット・スマートフォンの3デバイスが、すべて同じ進行画面をリアルタイムで同期表示している様子"
+              className="w-full max-w-3xl mx-auto rounded-lg border border-slate-200"
+              loading="lazy"
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -190,11 +207,17 @@ export default function HomePage() {
 
       <section className="bg-white border-t border-slate-200 py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 space-y-8">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800">こんな場面で使えます</h2>
             <p className="text-sm md:text-base text-slate-500">
               「順番」と「進行中」を全員のスマホに同期する、シンプルな仕組み
             </p>
+            <img
+              src={`${base}og/use-cases.png`}
+              alt="運動会の体育館スクリーン、薬局の待合室の番号表示、飲食店の順番待ち表示、3シーンが同じUIで並ぶ"
+              className="w-full max-w-4xl mx-auto rounded-lg border border-slate-200"
+              loading="lazy"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
