@@ -32,7 +32,7 @@ export default function DisplayPage() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div className="min-w-0">
               <div className="text-xl md:text-3xl font-bold text-slate-800 truncate">
-                {event?.title ?? 'school-live-board'}
+                {event?.title ?? 'live-board'}
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm md:text-base text-slate-500 mt-1">
                 {event?.location && <span>📍 {event.location}</span>}

@@ -1,4 +1,4 @@
-# school-live-board - サービス仕様書
+# live-board - サービス仕様書
 
 ## 1. サービス概要
 - **一言で**: 学校の運動会・文化祭で「今どのプログラムが進行中か」を全端末リアルタイム同期で大画面表示するアプリ
@@ -78,7 +78,7 @@ events/{eventId}/state/current             // 現在状態（単一ドキュメ�
 - `UIStore` — 表示テーマ・モード（運動会/文化祭/汎用）
 
 ## 6. 外部連携
-- **ホスティング**: GitHub Pages（`tsubasagit.github.io/school-live-board/`）
+- **ホスティング**: GitHub Pages（`tsubasagit.github.io/live-board/`）
 - **DB**: Firebase Firestore（リアルタイム同期）
 - **認証**: 運営者PIN（Firestore上のハッシュ比較、Firebase Auth は使わない軽量構成）
 - **画像/QR**: クライアントサイド生成（`qrcode` ライブラリ）

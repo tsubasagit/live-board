@@ -1,6 +1,6 @@
 # Firebase セットアップ手順
 
-school-live-board を動かすための Firebase プロジェクト作成と `.env.local` 設定の手順。
+live-board を動かすための Firebase プロジェクト作成と `.env` 設定の手順。プロジェクトIDは旧名 `school-live-board` のまま運用中（Firebase仕様でIDは変更不可）。
 
 ## 0. 前提
 

@@ -442,20 +442,32 @@ function EventSettings({
 }
 
 export function AthFooter() {
+  const base = import.meta.env.BASE_URL
   return (
     <footer className="bg-slate-50 border-t border-slate-200 mt-8">
       <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-500">
-        <div>
-          Powered by{' '}
-          <a
-            href="https://apptalenthub.co.jp?utm_source=school-live"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#538bb0] hover:underline font-semibold"
-          >
-            AppTalentHub
-          </a>
-        </div>
+        <a
+          href="https://apptalenthub.co.jp?utm_source=school-live"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+        >
+          <img
+            src={`${base}brand/ath-mark.png`}
+            alt=""
+            aria-hidden="true"
+            className="w-6 h-6 shrink-0"
+          />
+          <span className="text-slate-600">
+            Powered by{' '}
+            <span className="text-[#538bb0] font-semibold">AppTalentHub</span>
+          </span>
+          <img
+            src={`${base}brand/rapittokun.png`}
+            alt="ラピットくん"
+            className="w-7 h-7 rounded-full object-cover border border-slate-200 shrink-0"
+          />
+        </a>
         <a
           href="https://forms.apptalenthub.co.jp/contact?utm_source=school-live"
           target="_blank"
@@ -705,7 +717,7 @@ function downloadSampleCsv() {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'school-live-board-sample.csv'
+  a.download = 'live-board-sample.csv'
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)

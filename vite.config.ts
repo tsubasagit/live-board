@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/school-live-board/',
+  base: '/live-board/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

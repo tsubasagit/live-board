@@ -23,10 +23,17 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
       <div className="flex-1 max-w-3xl w-full mx-auto p-8 space-y-8">
-        <header className="text-center space-y-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-800">school-live-board</h1>
+        <header className="text-center space-y-3">
+          <div className="flex items-center justify-center gap-3">
+            <img
+              src={`${base}brand/rapittokun.png`}
+              alt="ラピットくん"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover shadow-sm border border-slate-200 shrink-0"
+            />
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-800">live-board</h1>
+          </div>
           <p className="text-slate-500 text-sm md:text-base">
-            学校イベントの進行プログラムを全端末リアルタイム同期で表示
+            「いま何番／何が進行中か」を全端末リアルタイム同期で大画面表示
           </p>
         </header>
 
@@ -175,13 +182,107 @@ export default function HomePage() {
             />
             <FeatureCard
               title="無料・サインアップ即利用"
-              body="広告なし。Firebase無料枠で運用、運動会1日500端末程度なら追加課金不要。"
+              body="広告なし。Firebase無料枠で運用、500端末程度の同時閲覧なら追加課金不要。"
             />
           </div>
         </div>
       </section>
 
+      <section className="bg-white border-t border-slate-200 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-4 space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800">こんな場面で使えます</h2>
+            <p className="text-sm md:text-base text-slate-500">
+              「順番」と「進行中」を全員のスマホに同期する、シンプルな仕組み
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <UseCaseCard
+              emoji="🏃"
+              title="運動会・体育祭"
+              body="今どの種目か体育館後方からでも分かる。グループLINEで保護者にURLを共有すれば、来賓席・別教室からスマホで進行を確認可能。"
+            />
+            <UseCaseCard
+              emoji="🎭"
+              title="文化祭・学園祭"
+              body="ステージ進行・出し物の順番を、来場者の保護者・卒業生にスマホで共有。紙のしおりを刷り直さずに変更追従できる。"
+            />
+            <UseCaseCard
+              emoji="💊"
+              title="薬局の処方待ち"
+              body="「ただいま◯番」を待合室の画面とスマホに同時表示。スタッフが番号を進めると全員のスマホが更新。アナウンス代わりに使える。"
+            />
+            <UseCaseCard
+              emoji="🍜"
+              title="飲食店・カフェの順番待ち"
+              body="店外待ちのお客様にQRを渡すだけで「あと何組」が見える。スタッフは厨房から1タップで進行管理。プリンタも整理券も不要。"
+            />
+            <UseCaseCard
+              emoji="💇"
+              title="美容室・サロンの受付"
+              body="次のお客様を呼び出すタイミングを店内モニタとスマホに反映。施術中のお客様や家族同行者にも進行状況が伝わる。"
+            />
+            <UseCaseCard
+              emoji="🏥"
+              title="クリニック・歯科の受付"
+              body="番号呼び出しシステムの簡易代替。スマホで呼ばれるタイミングが分かるので、車内・近隣で待っているお客様にも便利。"
+            />
+            <UseCaseCard
+              emoji="💍"
+              title="結婚式・パーティ"
+              body="進行表を司会・親族・新郎新婦で同期。歓談中のゲストも次のプログラム（ケーキ入刀・余興など）をスマホで把握できる。"
+            />
+            <UseCaseCard
+              emoji="🏘"
+              title="町内会・PTA・地域行事"
+              body="議事の進行や、お祭りステージの順番を会場全体に共有。集会所のテレビとスマホ両方に映せる。"
+            />
+            <UseCaseCard
+              emoji="🎤"
+              title="セミナー・社内総会"
+              body="アジェンダの進捗を会場・オンライン参加者の両方に同期表示。休憩タイミングや次のセッションが一目で分かる。"
+            />
+          </div>
+
+          <div className="text-center text-sm text-slate-500 pt-4">
+            他にも使えるアイデアがあれば、お気軽に
+            <a
+              href="https://forms.apptalenthub.co.jp/contact?utm_source=school-live"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#538bb0] hover:underline mx-1"
+            >
+              お問い合わせ
+            </a>
+            ください。
+          </div>
+        </div>
+      </section>
+
       <AthFooter />
+    </div>
+  )
+}
+
+function UseCaseCard({
+  emoji,
+  title,
+  body,
+}: {
+  emoji: string
+  title: string
+  body: string
+}) {
+  return (
+    <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2">
+      <div className="flex items-center gap-2">
+        <span className="text-2xl" aria-hidden="true">
+          {emoji}
+        </span>
+        <div className="text-base font-semibold text-slate-800">{title}</div>
+      </div>
+      <div className="text-sm text-slate-600 leading-relaxed">{body}</div>
     </div>
   )
 }

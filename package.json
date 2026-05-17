@@ -1,8 +1,8 @@
 {
-  "name": "school-live-board",
+  "name": "live-board",
   "version": "0.1.0",
   "private": true,
-  "description": "学校の運動会・文化祭で「今どのプログラムが進行中か」を全端末リアルタイム同期で大画面表示するアプリ",
+  "description": "イベント進行・順番待ち（運動会／文化祭／薬局／店舗受付など）を全端末リアルタイム同期で大画面表示するアプリ",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tsubasagit/school-live-board.git"
+    "url": "https://github.com/tsubasagit/live-board.git"
   },
   "dependencies": {
     "firebase": "^11.0.0",

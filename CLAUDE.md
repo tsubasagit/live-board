@@ -1,8 +1,8 @@
-# CLAUDE.md — school-live-board
+# CLAUDE.md — live-board
 
 ## Overview
 
-学校の運動会・文化祭で「今どのプログラムが進行中か」を全端末リアルタイム同期で大画面表示するアプリ。
+「いま何番／何が進行中か」を全端末リアルタイム同期で大画面表示するアプリ。学校行事（運動会・文化祭）から薬局・店舗の順番待ち、結婚式の進行表まで横展開を狙う。
 操作画面 / 表示画面を分離（Zustand 状態管理）し、Firebase Firestore `onSnapshot` を同期レイヤとして使うことで複数端末同時表示を実現する。
 
 ## Tech Stack
@@ -45,17 +45,17 @@ npm run deploy # GitHub Pages へデプロイ（後日設定）
 
 ## Firebase 設計メモ
 
-- プロジェクトID: 未確定（`new-project` 完了後に Firebase コンソールで作成）
+- プロジェクトID: `school-live-board`（Firebase仕様でプロジェクトIDは変更不可。表示名のみ「live-board」に変更可）
 - 課金プラン: Spark（無料）でスタート
 - セキュリティルール基本方針:
   - `events/{eventId}` の read は全員許可
-  - write は PINハッシュ照合 or 運営者カスタムクレーム必須
+  - write は `events.ownerId == request.auth.uid` の本人のみ（Google Sign-in）
   - 詳細は `firestore.rules` 参照
 - **セットアップ手順**: [docs/FIREBASE_SETUP.md](./docs/FIREBASE_SETUP.md)
 
 ## リポジトリ
 
-- origin: https://github.com/tsubasagit/school-live-board
+- origin: https://github.com/tsubasagit/live-board（旧 school-live-board）
 
 ## 仕様書
 
