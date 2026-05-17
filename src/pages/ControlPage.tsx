@@ -79,14 +79,20 @@ export default function ControlPage() {
     await setCurrentProgram(eventId, programId)
   }
 
+  const base = import.meta.env.BASE_URL
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
       <header className="bg-white border-b border-slate-200 px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div className="flex items-center gap-3 flex-wrap">
-          <Link to="/" className="text-slate-500 hover:text-[#538bb0] text-sm">
-            ← ホーム
+          <Link to="/" className="flex items-center gap-2 shrink-0" title="ホームへ">
+            <img
+              src={`${base}brand/liveboard-logo.png`}
+              alt="LiveBoard"
+              className="h-8 md:h-9 w-auto"
+            />
           </Link>
-          <h1 className="text-lg font-bold text-slate-800">🎛 操作画面</h1>
+          <span className="text-slate-300 hidden md:inline">/</span>
+          <h1 className="text-base md:text-lg font-bold text-slate-800">🎛 操作画面</h1>
           <span className="text-xs text-slate-400">
             event: <code>{eventId}</code>
           </span>

@@ -15,16 +15,13 @@ export default function HomePage() {
       <section className="bg-gradient-to-b from-[#eef5fa] via-white to-white">
         <div className="max-w-6xl mx-auto px-5 md:px-8 pt-12 md:pt-20 pb-10 md:pb-16 space-y-10 md:space-y-14">
           <header className="text-center space-y-6 md:space-y-8">
-            <div className="flex items-center justify-center gap-4">
+            <h1 className="flex justify-center">
               <img
-                src={`${base}brand/rapittokun.png`}
-                alt="ラピットくん"
-                className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover shadow-sm border border-slate-200 shrink-0"
+                src={`${base}brand/liveboard-logo.png`}
+                alt="LiveBoard"
+                className="h-20 md:h-32 w-auto"
               />
-              <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight">
-                live-board
-              </h1>
-            </div>
+            </h1>
             <p className="text-2xl md:text-4xl font-bold text-slate-900 leading-relaxed max-w-3xl mx-auto">
               <span className="text-[#538bb0]">いま、何が進行中か。</span>
               <br className="hidden md:inline" />

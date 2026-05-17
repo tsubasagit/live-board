@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./docs/screenshots/liveboard-logo.png" alt="LiveBoard" width="520" />
+</p>
+
 # live-board
 
 「いま何番／何が進行中か」を全端末リアルタイム同期で大画面表示するアプリ。
