@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -79,7 +80,7 @@ export async function saveEvent(event: Omit<SchoolEvent, 'createdAt'> & { create
       location: event.location ?? '',
       eventType: event.eventType,
       startDate: event.startDate,
-      createdAt: event.createdAt ?? new Date().toISOString(),
+      ...(event.createdAt ? { createdAt: event.createdAt } : {}),
       ...(event.ownerId ? { ownerId: event.ownerId } : {}),
       ...(event.pinHash ? { pinHash: event.pinHash } : {}),
     },
@@ -89,17 +90,15 @@ export async function saveEvent(event: Omit<SchoolEvent, 'createdAt'> & { create
 
 export async function ensureEventExists(eventId: string, ownerId: string) {
   const ref = eventDocRef(eventId)
-  await setDoc(
-    ref,
-    {
-      ownerId,
-      createdAt: new Date().toISOString(),
-      title: '',
-      eventType: 'sports_day',
-      startDate: new Date().toISOString().slice(0, 10),
-    },
-    { merge: true }
-  )
+  const snap = await getDoc(ref)
+  if (snap.exists()) return
+  await setDoc(ref, {
+    ownerId,
+    createdAt: new Date().toISOString(),
+    title: '',
+    eventType: 'sports_day',
+    startDate: new Date().toISOString().slice(0, 10),
+  })
 }
 
 export async function saveProgram(eventId: string, program: Program) {

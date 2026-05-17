@@ -41,6 +41,10 @@ export default function ControlPage() {
     subscribe()
   }, [eventId, setEventId, subscribe])
 
+  const cur = useMemo(() => currentProgram(programs, current), [programs, current])
+  const next = useMemo(() => nextProgram(programs, current), [programs, current])
+  const prev = useMemo(() => previousProgram(programs, current), [programs, current])
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white text-slate-500">
@@ -54,10 +58,6 @@ export default function ControlPage() {
   }
 
   const isOwner = !event?.ownerId || event.ownerId === user.uid
-
-  const cur = useMemo(() => currentProgram(programs, current), [programs, current])
-  const next = useMemo(() => nextProgram(programs, current), [programs, current])
-  const prev = useMemo(() => previousProgram(programs, current), [programs, current])
 
   const handleAdvance = async (direction: 'next' | 'prev') => {
     const target = direction === 'next' ? next : prev
