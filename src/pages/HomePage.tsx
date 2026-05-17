@@ -19,6 +19,7 @@ export default function HomePage() {
     })
   }, [eventId])
 
+  const base = import.meta.env.BASE_URL
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
       <div className="flex-1 max-w-3xl w-full mx-auto p-8 space-y-8">
@@ -109,7 +110,87 @@ export default function HomePage() {
           </p>
         </section>
       </div>
+
+      <section className="bg-slate-50 border-t border-slate-200 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-4 space-y-10">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800">アプリの使い方</h2>
+            <p className="text-sm md:text-base text-slate-500">
+              運営者は1台で操作、視聴者は何台でも同時に同じ画面が見られます
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <figure className="space-y-3">
+              <img
+                src={`${base}screenshots/display-program1.png`}
+                alt="表示画面 — 現在進行中のプログラム「かけっこ」を中央に大きく表示。右側にプログラム一覧"
+                className="w-full rounded-lg border border-slate-200 shadow-sm"
+                loading="lazy"
+              />
+              <figcaption className="text-sm text-slate-600">
+                <span className="font-semibold text-slate-800">📺 表示画面（来場者向け）</span>
+                <br />
+                ヘッダーにタイトル・場所・概要、中央に現在進行中のプログラムを大きく表示。
+              </figcaption>
+            </figure>
+
+            <figure className="space-y-3">
+              <img
+                src={`${base}screenshots/display-program2.png`}
+                alt="表示画面 — 「次へ」を押した瞬間、全端末で同時に「リレー」へ切替"
+                className="w-full rounded-lg border border-slate-200 shadow-sm"
+                loading="lazy"
+              />
+              <figcaption className="text-sm text-slate-600">
+                <span className="font-semibold text-slate-800">⚡ 全端末リアルタイム同期</span>
+                <br />
+                「次へ」を1回押すだけで、大画面・各教室モニタ・保護者のスマホが瞬時に切り替わる。
+              </figcaption>
+            </figure>
+          </div>
+
+          <figure className="space-y-3">
+            <img
+              src={`${base}screenshots/control.png`}
+              alt="操作画面 — 表示レイアウト切替、イベント設定、進行コントロール、プログラム一覧、CSV一括登録を1画面に集約"
+              className="w-full rounded-lg border border-slate-200 shadow-sm"
+              loading="lazy"
+            />
+            <figcaption className="text-sm text-slate-600 text-center">
+              <span className="font-semibold text-slate-800">🎛 操作画面（運営者向け）</span>
+              <br />
+              表示画面のレイアウト切替・イベント設定・進行コントロール・プログラム一覧・CSV一括登録を1画面に集約。スマホからでも片手で操作可能。
+            </figcaption>
+          </figure>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FeatureCard
+              title="Googleログインで安全"
+              body="自分が作ったイベントは、自分しか編集できません。視聴者はログイン不要。"
+            />
+            <FeatureCard
+              title="CSV一括登録"
+              body="プログラムが多くてもCSV貼り付けで一気に登録。サンプルCSVもダウンロード可能。"
+            />
+            <FeatureCard
+              title="無料・サインアップ即利用"
+              body="広告なし。Firebase無料枠で運用、運動会1日500端末程度なら追加課金不要。"
+            />
+          </div>
+        </div>
+      </section>
+
       <AthFooter />
+    </div>
+  )
+}
+
+function FeatureCard({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="bg-white border border-slate-200 rounded-lg p-4 space-y-1">
+      <div className="text-base font-semibold text-slate-800">{title}</div>
+      <div className="text-sm text-slate-600">{body}</div>
     </div>
   )
 }
