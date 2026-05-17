@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { AlertTriangle, ChevronLeft, ChevronRight, Download, Eye, EyeOff, LogOut, Plus, Trash2, Upload } from 'lucide-react'
+import { AlertTriangle, ChevronLeft, ChevronRight, Copy, Download, Eye, EyeOff, LogOut, Plus, Trash2, Upload } from 'lucide-react'
+import QRCode from 'qrcode'
 import { isFirebaseConfigured, uidToEventId } from '@/lib/firebase'
 import {
   currentProgram,
@@ -18,9 +19,10 @@ import {
   saveProgramsBulk,
   saveViewSettings,
   setCurrentProgram,
+  setEventPublished,
   updateProgramStatus,
 } from '@/lib/sync'
-import type { EventType, Program, ViewSettings } from '@/types'
+import type { EventType, Program, SchoolEvent, ViewSettings } from '@/types'
 
 export default function ControlPage() {
   const [searchParams] = useSearchParams()
@@ -129,6 +131,8 @@ export default function ControlPage() {
       )}
 
       <div className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 space-y-6">
+        <SharePanel eventId={eventId} event={event} canEdit={isOwner} />
+
         <DisplayViewPanel eventId={eventId} view={view} />
 
         <EventSettings
@@ -261,6 +265,124 @@ function DangerZone({ eventId, eventTitle }: { eventId: string; eventTitle: stri
           <Trash2 size={16} />
           {busy ? '削除中…' : 'このイベントを完全に削除'}
         </button>
+      )}
+    </section>
+  )
+}
+
+function SharePanel({
+  eventId,
+  event,
+  canEdit,
+}: {
+  eventId: string
+  event: SchoolEvent | null
+  canEdit: boolean
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [copied, setCopied] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  const published = event?.published === true
+  const viewerUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}${window.location.pathname}#/display?event=${eventId}`
+      : ''
+
+  useEffect(() => {
+    if (!published || !canvasRef.current || !viewerUrl) return
+    QRCode.toCanvas(canvasRef.current, viewerUrl, { width: 200, margin: 1 }).catch(() => {})
+  }, [published, viewerUrl])
+
+  const togglePublish = async (next: boolean) => {
+    setBusy(true)
+    try {
+      await setEventPublished(eventId, next)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(viewerUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <section
+      className={`rounded-lg p-4 md:p-6 border-2 ${
+        published ? 'bg-[#538bb0]/5 border-[#538bb0]' : 'bg-slate-50 border-slate-300'
+      }`}
+    >
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+        <div>
+          <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+            {published ? '🟢' : '⚪'} 視聴者への共有
+          </h2>
+          <p className="text-xs text-slate-500 mt-1">
+            公開すると、誰でも視聴できるURLとQRコードが発行されます
+          </p>
+        </div>
+        {canEdit && (
+          <button
+            onClick={() => togglePublish(!published)}
+            disabled={busy}
+            className={`px-5 py-2.5 rounded-lg font-bold text-sm shrink-0 disabled:opacity-50 ${
+              published
+                ? 'bg-white border-2 border-red-300 text-red-600 hover:bg-red-50'
+                : 'bg-[#538bb0] hover:bg-[#3d6f94] text-white'
+            }`}
+          >
+            {busy ? '...' : published ? '🔒 非公開にする' : '📡 公開する'}
+          </button>
+        )}
+      </div>
+
+      {published ? (
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-5 items-start">
+          <div className="bg-white p-3 rounded border border-slate-200 inline-block mx-auto">
+            <canvas ref={canvasRef} />
+          </div>
+          <div className="space-y-3">
+            <div>
+              <div className="text-xs text-slate-500 mb-1">視聴者用URL（QRから自動アクセスされます）</div>
+              <div className="flex gap-2">
+                <input
+                  readOnly
+                  value={viewerUrl}
+                  className="flex-1 bg-white border border-slate-300 rounded px-3 py-2 text-sm text-slate-700 font-mono"
+                  onFocus={(e) => e.target.select()}
+                />
+                <button
+                  onClick={handleCopy}
+                  className="bg-[#538bb0] hover:bg-[#3d6f94] text-white px-3 py-2 rounded text-sm font-bold flex items-center gap-1 shrink-0"
+                >
+                  <Copy size={14} />
+                  {copied ? 'コピーOK' : 'コピー'}
+                </button>
+              </div>
+            </div>
+            <div className="text-xs text-slate-600 bg-white border border-slate-200 rounded p-3 space-y-1">
+              <div className="font-semibold">📣 視聴者への共有方法</div>
+              <div>① 上のURLをLINE/メールで保護者・関係者に送る</div>
+              <div>② または、会場入口・配布物にこのQRコードを印刷</div>
+              <div>③ 視聴者はログイン不要・誰でも閲覧可能</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white border border-slate-200 rounded p-4 text-center text-sm text-slate-600 space-y-2">
+          <div className="text-3xl">🔒</div>
+          <div>
+            このイベントは現在<strong>非公開</strong>です。<br />
+            プログラム登録などの準備が整ったら、上の「<strong>📡 公開する</strong>」ボタンを押してください。
+          </div>
+        </div>
       )}
     </section>
   )

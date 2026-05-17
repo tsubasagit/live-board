@@ -82,10 +82,15 @@ export async function saveEvent(event: Omit<SchoolEvent, 'createdAt'> & { create
       startDate: event.startDate,
       ...(event.createdAt ? { createdAt: event.createdAt } : {}),
       ...(event.ownerId ? { ownerId: event.ownerId } : {}),
+      ...(typeof event.published === 'boolean' ? { published: event.published } : {}),
       ...(event.pinHash ? { pinHash: event.pinHash } : {}),
     },
     { merge: true }
   )
+}
+
+export async function setEventPublished(eventId: string, published: boolean) {
+  await updateDoc(eventDocRef(eventId), { published })
 }
 
 export async function ensureEventExists(eventId: string, ownerId: string) {
@@ -98,6 +103,7 @@ export async function ensureEventExists(eventId: string, ownerId: string) {
     title: '',
     eventType: 'sports_day',
     startDate: new Date().toISOString().slice(0, 10),
+    published: false,
   })
 }
 

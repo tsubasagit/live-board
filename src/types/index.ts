@@ -11,6 +11,7 @@ export interface SchoolEvent {
   startDate: string
   createdAt: string
   ownerId?: string
+  published?: boolean
   pinHash?: string
 }
 

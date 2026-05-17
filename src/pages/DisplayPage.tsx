@@ -24,6 +24,14 @@ export default function DisplayPage() {
   if (error) {
     return <DisplayStatus message={error} tone="error" />
   }
+  if (event && event.published !== true) {
+    return (
+      <DisplayStatus
+        message={`${event.title || 'このイベント'}は現在準備中です。主催者が「公開」にすると表示されます。`}
+        tone="info"
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">

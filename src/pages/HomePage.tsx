@@ -1,23 +1,12 @@
-import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import QRCode from 'qrcode'
 import { LogOut } from 'lucide-react'
-import { DEFAULT_EVENT_ID, isFirebaseConfigured, uidToEventId } from '@/lib/firebase'
+import { isFirebaseConfigured, uidToEventId } from '@/lib/firebase'
 import { useAuthStore } from '@/store/useAuthStore'
 import { AthFooter } from './ControlPage'
 
 export default function HomePage() {
   const { user, loading, signIn, signOut } = useAuthStore()
-  const eventId = user ? uidToEventId(user.uid) : DEFAULT_EVENT_ID
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    if (!canvasRef.current) return
-    const url = `${window.location.origin}${window.location.pathname}#/display?event=${eventId}`
-    QRCode.toCanvas(canvasRef.current, url, { width: 220 }).catch((e) => {
-      console.error('QR生成失敗:', e)
-    })
-  }, [eventId])
+  const eventId = user ? uidToEventId(user.uid) : null
 
   const base = import.meta.env.BASE_URL
   return (
@@ -58,17 +47,12 @@ export default function HomePage() {
         )}
 
         {!loading && (
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex items-center justify-between gap-3">
-            {user ? (
-              <>
+          user && eventId ? (
+            <div className="bg-[#538bb0]/5 border-2 border-[#538bb0] rounded-lg p-5 space-y-4">
+              <div className="flex items-center justify-between gap-3">
                 <div className="text-sm text-slate-700 min-w-0">
-                  <div className="text-xs text-slate-500">ログイン中</div>
-                  <div className="font-semibold truncate">
-                    {user.displayName || user.email}
-                  </div>
-                  <div className="text-xs text-slate-500 truncate">
-                    イベントID: <code className="bg-white border border-slate-200 px-1 rounded">{eventId}</code>
-                  </div>
+                  <div className="text-xs text-[#538bb0] font-semibold">ログイン中</div>
+                  <div className="font-semibold truncate">{user.displayName || user.email}</div>
                 </div>
                 <button
                   onClick={signOut}
@@ -77,56 +61,35 @@ export default function HomePage() {
                   <LogOut size={14} />
                   ログアウト
                 </button>
-              </>
-            ) : (
-              <>
-                <div className="text-sm text-slate-600">
-                  イベントを編集するには Google ログインが必要です（視聴は不要）
-                </div>
-                <button
-                  onClick={signIn}
-                  className="bg-[#538bb0] hover:bg-[#3d6f94] text-white px-3 py-1.5 rounded text-sm font-bold shrink-0"
-                >
-                  ログイン
-                </button>
-              </>
-            )}
-          </div>
+              </div>
+              <Link
+                to={`/control?event=${eventId}`}
+                className="block w-full bg-[#538bb0] hover:bg-[#3d6f94] text-white px-4 py-3 rounded text-center font-bold text-lg"
+              >
+                🎛 あなたのイベント操作画面へ
+              </Link>
+              <p className="text-xs text-slate-500 text-center">
+                操作画面内で「公開」をONにすると、視聴者用URLとQRコードが発行されます
+              </p>
+            </div>
+          ) : (
+            <div className="bg-[#538bb0]/5 border-2 border-[#538bb0] rounded-lg p-6 text-center space-y-4">
+              <h2 className="text-xl font-bold text-slate-800">無料で今すぐ始める</h2>
+              <p className="text-sm text-slate-600">
+                Google アカウントでログインするだけ。あなた専用の編集権限つきイベントが自動作成されます。視聴者はログイン不要、配布されたQR/URLからアクセスできます。
+              </p>
+              <button
+                onClick={signIn}
+                className="w-full md:w-auto bg-[#538bb0] hover:bg-[#3d6f94] text-white px-6 py-3 rounded-lg font-bold text-lg"
+              >
+                Google でログインして始める
+              </button>
+              <div className="pt-2 text-xs text-slate-500">
+                すでにイベント主催者から配布されたURL/QRをお持ちの方は、そのまま開けば視聴できます（ログイン不要）。
+              </div>
+            </div>
+          )
         )}
-
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link
-            to="/control"
-            className="bg-[#538bb0] hover:bg-[#3d6f94] transition-colors rounded-lg p-6 text-center space-y-2 text-white"
-          >
-            <div className="text-2xl font-bold">🎛 操作画面</div>
-            <p className="text-sm text-white/90">
-              プログラム編集・現在進行中の切替（教員・実行委員向け）
-            </p>
-          </Link>
-          <Link
-            to="/display"
-            className="bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors rounded-lg p-6 text-center space-y-2 text-slate-800"
-          >
-            <div className="text-2xl font-bold">📺 表示画面</div>
-            <p className="text-sm text-slate-600">
-              大画面・スマホ向けフルスクリーン表示
-            </p>
-          </Link>
-        </section>
-
-        <section className="bg-slate-50 border border-slate-200 rounded-lg p-6 text-center space-y-3">
-          <h2 className="text-lg font-semibold text-slate-800">視聴者用QR</h2>
-          <p className="text-sm text-slate-500">
-            このQRから視聴者は表示画面にアクセスできます
-          </p>
-          <div className="flex justify-center bg-white p-3 rounded inline-block mx-auto w-fit border border-slate-200">
-            <canvas ref={canvasRef} />
-          </div>
-          <p className="text-xs text-slate-500 break-all">
-            イベントID: <code className="bg-white border border-slate-200 px-1 rounded">{eventId}</code>
-          </p>
-        </section>
       </div>
 
       <section className="bg-slate-50 border-t border-slate-200 py-12 md:py-16">
