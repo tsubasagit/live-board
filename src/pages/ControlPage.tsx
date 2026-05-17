@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Download, Eye, EyeOff, Plus, Trash2, Upload } from 'lucide-react'
+import { AlertTriangle, ChevronLeft, ChevronRight, Download, Eye, EyeOff, Plus, Trash2, Upload } from 'lucide-react'
 import { DEFAULT_EVENT_ID, isFirebaseConfigured } from '@/lib/firebase'
 import {
   currentProgram,
@@ -9,6 +9,7 @@ import {
   useEventStore,
 } from '@/store/useEventStore'
 import {
+  deleteEventCompletely,
   deleteProgram,
   saveEvent,
   saveProgram,
@@ -148,10 +149,78 @@ export default function ControlPage() {
         />
 
         <AddProgramForm eventId={eventId} nextOrder={programs.length + 1} />
+
+        <DangerZone eventId={eventId} eventTitle={event?.title ?? ''} />
       </div>
 
       <AthFooter />
     </div>
+  )
+}
+
+function DangerZone({ eventId, eventTitle }: { eventId: string; eventTitle: string }) {
+  const [busy, setBusy] = useState(false)
+  const [done, setDone] = useState(false)
+
+  const handleDelete = async () => {
+    const label = eventTitle || eventId
+    const confirmed = window.confirm(
+      `「${label}」を完全に削除します。\n\n` +
+        '・全プログラム\n・イベント設定（タイトル/場所/概要）\n・進行中の状態\n・表示画面のレイアウト設定\n\n' +
+        'すべて消えて元に戻せません。本当に削除しますか？'
+    )
+    if (!confirmed) return
+    const phrase = window.prompt(
+      `最終確認: イベントIDをそのまま入力してください\n（${eventId}）`
+    )
+    if (phrase !== eventId) {
+      if (phrase !== null) window.alert('入力が一致しません。中止しました。')
+      return
+    }
+    setBusy(true)
+    try {
+      await deleteEventCompletely(eventId)
+      setDone(true)
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e)
+      window.alert(`削除に失敗しました: ${msg}`)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <section className="bg-red-50 border-2 border-red-300 rounded-lg p-4 md:p-6 space-y-3">
+      <h2 className="text-lg font-semibold flex items-center gap-2 text-red-700">
+        <AlertTriangle size={18} />
+        危険な操作
+      </h2>
+      <p className="text-sm text-red-700">
+        このイベント（<code className="bg-white px-1 rounded border border-red-200">{eventId}</code>）に紐づくデータをすべて削除し、まっさらな状態から作り直します。
+      </p>
+      {done ? (
+        <div className="bg-white border border-red-200 rounded p-3 text-sm text-slate-700">
+          削除しました。ページを再読み込みすると新規イベントとして登録できます。
+          <div className="mt-2">
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-[#538bb0] hover:bg-[#3d6f94] text-white px-3 py-1.5 rounded text-sm font-bold"
+            >
+              再読み込み
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={handleDelete}
+          disabled={busy}
+          className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 rounded text-sm font-bold flex items-center gap-2"
+        >
+          <Trash2 size={16} />
+          {busy ? '削除中…' : 'このイベントを完全に削除'}
+        </button>
+      )}
+    </section>
   )
 }
 

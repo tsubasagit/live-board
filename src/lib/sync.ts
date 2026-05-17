@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -138,4 +139,13 @@ export async function saveViewSettings(eventId: string, view: ViewSettings) {
 
 export async function saveProgramsBulk(eventId: string, programs: Program[]) {
   await Promise.all(programs.map((p) => saveProgram(eventId, p)))
+}
+
+export async function deleteEventCompletely(eventId: string) {
+  const db = getDb()
+  const programsSnap = await getDocs(programsCollectionRef(eventId))
+  await Promise.all(programsSnap.docs.map((d) => deleteDoc(d.ref)))
+  const stateSnap = await getDocs(collection(db, 'events', eventId, 'state'))
+  await Promise.all(stateSnap.docs.map((d) => deleteDoc(d.ref)))
+  await deleteDoc(eventDocRef(eventId))
 }
