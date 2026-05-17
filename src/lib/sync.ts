@@ -11,7 +11,7 @@ import {
   type Unsubscribe,
 } from 'firebase/firestore'
 import { getDb } from './firebase'
-import type { CurrentState, Program, SchoolEvent } from '@/types'
+import type { CurrentState, Program, SchoolEvent, ViewSettings } from '@/types'
 
 export function eventDocRef(eventId: string) {
   return doc(getDb(), 'events', eventId)
@@ -23,6 +23,10 @@ export function programsCollectionRef(eventId: string) {
 
 export function currentStateDocRef(eventId: string) {
   return doc(getDb(), 'events', eventId, 'state', 'current')
+}
+
+export function viewSettingsDocRef(eventId: string) {
+  return doc(getDb(), 'events', eventId, 'state', 'view')
 }
 
 export function subscribeEvent(
@@ -70,6 +74,8 @@ export async function saveEvent(event: Omit<SchoolEvent, 'createdAt'> & { create
     eventDocRef(event.id),
     {
       title: event.title,
+      description: event.description ?? '',
+      location: event.location ?? '',
       eventType: event.eventType,
       startDate: event.startDate,
       createdAt: event.createdAt ?? new Date().toISOString(),
@@ -111,4 +117,25 @@ export async function updateProgramStatus(
   status: Program['status']
 ) {
   await updateDoc(doc(programsCollectionRef(eventId), programId), { status })
+}
+
+export function subscribeViewSettings(
+  eventId: string,
+  onChange: (view: ViewSettings | null) => void
+): Unsubscribe {
+  return onSnapshot(viewSettingsDocRef(eventId), (snap) => {
+    if (!snap.exists()) {
+      onChange(null)
+      return
+    }
+    onChange(snap.data() as ViewSettings)
+  })
+}
+
+export async function saveViewSettings(eventId: string, view: ViewSettings) {
+  await setDoc(viewSettingsDocRef(eventId), view, { merge: true })
+}
+
+export async function saveProgramsBulk(eventId: string, programs: Program[]) {
+  await Promise.all(programs.map((p) => saveProgram(eventId, p)))
 }

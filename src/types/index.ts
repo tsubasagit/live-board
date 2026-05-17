@@ -5,6 +5,8 @@ export type ProgramStatus = 'upcoming' | 'current' | 'done'
 export interface SchoolEvent {
   id: string
   title: string
+  description?: string
+  location?: string
   eventType: EventType
   startDate: string
   createdAt: string
@@ -16,7 +18,6 @@ export interface Program {
   order: number
   title: string
   description: string
-  location: string
   scheduledStart: string
   scheduledEnd: string
   status: ProgramStatus
@@ -26,4 +27,9 @@ export interface CurrentState {
   currentProgramId: string | null
   updatedAt: string
   updatedBy?: string
+}
+
+export interface ViewSettings {
+  showEventInfo: boolean
+  showProgramList: boolean
 }
