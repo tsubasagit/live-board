@@ -3,7 +3,7 @@
 ## Overview
 
 学校の運動会・文化祭で「今どのプログラムが進行中か」を全端末リアルタイム同期で大画面表示するアプリ。
-[tsubasagit/yakyuu-hito](https://github.com/tsubasagit/yakyuu-hito) から構造（操作画面 / 表示画面分離・Zustand状態管理）を流用し、同期レイヤを Firebase Firestore `onSnapshot` に差し替えることで複数端末同時表示を実現する。
+操作画面 / 表示画面を分離（Zustand 状態管理）し、Firebase Firestore `onSnapshot` を同期レイヤとして使うことで複数端末同時表示を実現する。
 
 ## Tech Stack
 
@@ -39,7 +39,7 @@ npm run deploy # GitHub Pages へデプロイ（後日設定）
 - コンポーネントは PascalCase
 - 日本語UIテキスト
 - 表示画面は **フォントサイズ大・高コントラスト**（後方席・直射日光下での視認性優先）
-- 同期は必ず Firestore 経由（BroadcastChannel は使わない＝端末をまたぐ要件のため）
+- 同期は必ず Firestore 経由（端末をまたぐ要件のため）
 - Firebase 設定キーはクライアントに露出する前提 → セキュリティルール側で防御
 - write は `events/{eventId}` の `pinHash` を経由した認証チェック（Firestore Functions or rules）
 
@@ -56,7 +56,6 @@ npm run deploy # GitHub Pages へデプロイ（後日設定）
 ## リポジトリ
 
 - origin: https://github.com/tsubasagit/school-live-board
-- 派生元: https://github.com/tsubasagit/yakyuu-hito
 
 ## 仕様書
 

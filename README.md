@@ -4,10 +4,6 @@
 
 体育館の大型スクリーン・各教室モニタ・来場した保護者のスマホが、全員同じ画面を見られる。
 
-## 派生元
-
-[tsubasagit/yakyuu-hito](https://github.com/tsubasagit/yakyuu-hito) の操作画面 / 表示画面分離構成と Zustand 状態管理を流用。同期レイヤを `BroadcastChannel API`（同一ブラウザ内）から **Firebase Firestore `onSnapshot`**（端末横断）に差し替えることで複数端末同時表示を実現。
-
 ## Tech Stack
 
 - React + Vite + TypeScript

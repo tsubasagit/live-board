@@ -10,7 +10,6 @@
   - アナウンスだけだと聞き逃す保護者・生徒が多い
   - 紙のしおりはリアルタイムの遅れ・前倒しに追従できない
 - **ステータス**: MVP（v0.1.0-alpha、2026-05-16 キックオフ）
-- **派生元**: [tsubasagit/yakyuu-hito](https://github.com/tsubasagit/yakyuu-hito) の操作画面・表示画面分離構成と Zustand 状態管理を流用。同期レイヤは BroadcastChannel API → Firebase Firestore `onSnapshot` に差し替え
 
 ## 2. ユーザーロールと権限
 | ロール | できること |
@@ -106,10 +105,9 @@ events/{eventId}/state/current             // 現在状態（単一ドキュメ�
 ## 10. 更新履歴
 | 日付 | 内容 |
 |---|---|
-| 2026-05-16 | 初版作成。yakyuu-hito からの派生方針を確定 |
+| 2026-05-16 | 初版作成 |
 
 ---
 
 ## 関連ドキュメント
-- 派生元: [tsubasagit/yakyuu-hito](https://github.com/tsubasagit/yakyuu-hito)
 - 技術メモ: `CLAUDE.md`
