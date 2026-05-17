@@ -8,12 +8,18 @@ html, body, #root {
   min-height: 100vh;
 }
 
+html {
+  font-size: 17px;
+}
+@media (min-width: 768px) {
+  html { font-size: 18px; }
+}
 html, body {
   font-family:
-    'Inter',
     'Noto Sans JP',
-    'Hiragino Sans',
+    'Inter',
     'Hiragino Kaku Gothic ProN',
+    'Hiragino Sans',
     'Yu Gothic',
     'Yu Gothic Medium',
     'Meiryo',
@@ -24,9 +30,15 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+  line-height: 1.75;
   background: #ffffff;
-  color: #1e293b;
+  color: #0f172a;
+}
+h1, h2, h3, h4 {
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  font-weight: 700;
 }
 
 @keyframes pulse-slow {
