@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import QRCode from 'qrcode'
-import { DEFAULT_EVENT_ID, isFirebaseConfigured } from '@/lib/firebase'
+import { LogOut } from 'lucide-react'
+import { DEFAULT_EVENT_ID, isFirebaseConfigured, uidToEventId } from '@/lib/firebase'
+import { useAuthStore } from '@/store/useAuthStore'
 import { AthFooter } from './ControlPage'
 
 export default function HomePage() {
-  const [eventId] = useState(DEFAULT_EVENT_ID)
+  const { user, loading, signIn, signOut } = useAuthStore()
+  const eventId = user ? uidToEventId(user.uid) : DEFAULT_EVENT_ID
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -32,6 +35,43 @@ export default function HomePage() {
             <code className="bg-amber-100 px-1 rounded">.env</code>{' '}
             を作成し、<code className="bg-amber-100 px-1 rounded">VITE_FIREBASE_*</code>{' '}
             を設定してください。
+          </div>
+        )}
+
+        {!loading && (
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex items-center justify-between gap-3">
+            {user ? (
+              <>
+                <div className="text-sm text-slate-700 min-w-0">
+                  <div className="text-xs text-slate-500">ログイン中</div>
+                  <div className="font-semibold truncate">
+                    {user.displayName || user.email}
+                  </div>
+                  <div className="text-xs text-slate-500 truncate">
+                    イベントID: <code className="bg-white border border-slate-200 px-1 rounded">{eventId}</code>
+                  </div>
+                </div>
+                <button
+                  onClick={signOut}
+                  className="text-xs text-slate-500 hover:text-red-500 flex items-center gap-1 shrink-0"
+                >
+                  <LogOut size={14} />
+                  ログアウト
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="text-sm text-slate-600">
+                  イベントを編集するには Google ログインが必要です（視聴は不要）
+                </div>
+                <button
+                  onClick={signIn}
+                  className="bg-[#538bb0] hover:bg-[#3d6f94] text-white px-3 py-1.5 rounded text-sm font-bold shrink-0"
+                >
+                  ログイン
+                </button>
+              </>
+            )}
           </div>
         )}
 

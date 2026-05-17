@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { AlertTriangle, ChevronLeft, ChevronRight, Download, Eye, EyeOff, Plus, Trash2, Upload } from 'lucide-react'
-import { DEFAULT_EVENT_ID, isFirebaseConfigured } from '@/lib/firebase'
+import { AlertTriangle, ChevronLeft, ChevronRight, Download, Eye, EyeOff, LogOut, Plus, Trash2, Upload } from 'lucide-react'
+import { isFirebaseConfigured, uidToEventId } from '@/lib/firebase'
 import {
   currentProgram,
   nextProgram,
   previousProgram,
   useEventStore,
 } from '@/store/useEventStore'
+import { useAuthStore } from '@/store/useAuthStore'
 import {
   deleteEventCompletely,
   deleteProgram,
+  ensureEventExists,
   saveEvent,
   saveProgram,
   saveProgramsBulk,
@@ -22,14 +24,36 @@ import type { EventType, Program, ViewSettings } from '@/types'
 
 export default function ControlPage() {
   const [searchParams] = useSearchParams()
-  const eventId = searchParams.get('event') ?? DEFAULT_EVENT_ID
+  const { user, loading: authLoading, error: authError, signIn, signOut } = useAuthStore()
+
+  const eventId = searchParams.get('event') ?? (user ? uidToEventId(user.uid) : '')
 
   const { event, programs, current, view, error, setEventId, subscribe } = useEventStore()
 
   useEffect(() => {
+    if (!user || !eventId) return
+    ensureEventExists(eventId, user.uid).catch(() => {})
+  }, [user, eventId])
+
+  useEffect(() => {
+    if (!eventId) return
     setEventId(eventId)
     subscribe()
   }, [eventId, setEventId, subscribe])
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white text-slate-500">
+        読み込み中…
+      </div>
+    )
+  }
+
+  if (!user) {
+    return <LoginGate signIn={signIn} error={authError} />
+  }
+
+  const isOwner = !event?.ownerId || event.ownerId === user.uid
 
   const cur = useMemo(() => currentProgram(programs, current), [programs, current])
   const next = useMemo(() => nextProgram(programs, current), [programs, current])
@@ -55,8 +79,8 @@ export default function ControlPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
-      <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="bg-white border-b border-slate-200 px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+        <div className="flex items-center gap-3 flex-wrap">
           <Link to="/" className="text-slate-500 hover:text-[#538bb0] text-sm">
             ← ホーム
           </Link>
@@ -65,19 +89,37 @@ export default function ControlPage() {
             event: <code>{eventId}</code>
           </span>
         </div>
-        <Link
-          to={`/display?event=${eventId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm bg-[#538bb0] hover:bg-[#3d6f94] text-white px-3 py-1.5 rounded"
-        >
-          表示画面を開く ↗
-        </Link>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-500 truncate max-w-[12rem]">
+            {user.displayName || user.email}
+          </span>
+          <button
+            onClick={signOut}
+            className="text-xs text-slate-500 hover:text-red-500 flex items-center gap-1"
+            title="ログアウト"
+          >
+            <LogOut size={14} />
+            ログアウト
+          </button>
+          <Link
+            to={`/display?event=${eventId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm bg-[#538bb0] hover:bg-[#3d6f94] text-white px-3 py-1.5 rounded"
+          >
+            表示画面を開く ↗
+          </Link>
+        </div>
       </header>
 
       {!isFirebaseConfigured && (
         <div className="bg-amber-50 border-b border-amber-300 px-4 py-2 text-sm text-amber-800">
           ⚠️ Firebase 未設定。<code>.env</code> に VITE_FIREBASE_* を設定してください。
+        </div>
+      )}
+      {!isOwner && (
+        <div className="bg-amber-50 border-b border-amber-300 px-4 py-2 text-sm text-amber-800">
+          ⚠️ このイベントの所有者は別のアカウントです。閲覧のみ可能（編集できません）。
         </div>
       )}
       {error && (
@@ -221,6 +263,35 @@ function DangerZone({ eventId, eventTitle }: { eventId: string; eventTitle: stri
         </button>
       )}
     </section>
+  )
+}
+
+function LoginGate({
+  signIn,
+  error,
+}: {
+  signIn: () => Promise<void>
+  error: string | null
+}) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="max-w-md w-full bg-slate-50 border border-slate-200 rounded-lg p-6 md:p-8 space-y-4 text-center">
+        <h1 className="text-2xl font-bold text-slate-800">🎛 操作画面ログイン</h1>
+        <p className="text-sm text-slate-600">
+          イベントを編集するにはログインしてください。あなたが作成したイベントは、あなたしか編集できません。
+        </p>
+        <button
+          onClick={signIn}
+          className="w-full bg-[#538bb0] hover:bg-[#3d6f94] text-white px-4 py-3 rounded font-bold"
+        >
+          Google でログイン
+        </button>
+        {error && <div className="text-xs text-red-600">{error}</div>}
+        <div className="text-xs text-slate-500 pt-2">
+          視聴者向けの表示画面はログイン不要で誰でも見られます。
+        </div>
+      </div>
+    </div>
   )
 }
 

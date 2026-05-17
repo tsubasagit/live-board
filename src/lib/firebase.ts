@@ -1,4 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
+import { getAuth, type Auth } from 'firebase/auth'
 import { getFirestore, type Firestore } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -12,12 +13,13 @@ const firebaseConfig = {
 
 let appInstance: FirebaseApp | null = null
 let dbInstance: Firestore | null = null
+let authInstance: Auth | null = null
 
 export function getFirebaseApp(): FirebaseApp {
   if (!appInstance) {
     if (!firebaseConfig.projectId) {
       throw new Error(
-        'Firebase 設定が未読み込みです。.env.local に VITE_FIREBASE_* を設定してください'
+        'Firebase 設定が未読み込みです。.env に VITE_FIREBASE_* を設定してください'
       )
     }
     appInstance = initializeApp(firebaseConfig)
@@ -30,6 +32,17 @@ export function getDb(): Firestore {
     dbInstance = getFirestore(getFirebaseApp())
   }
   return dbInstance
+}
+
+export function getFirebaseAuth(): Auth {
+  if (!authInstance) {
+    authInstance = getAuth(getFirebaseApp())
+  }
+  return authInstance
+}
+
+export function uidToEventId(uid: string): string {
+  return `evt-${uid.slice(0, 12)}`
 }
 
 export const DEFAULT_EVENT_ID =

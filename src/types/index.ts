@@ -10,6 +10,7 @@ export interface SchoolEvent {
   eventType: EventType
   startDate: string
   createdAt: string
+  ownerId?: string
   pinHash?: string
 }
 

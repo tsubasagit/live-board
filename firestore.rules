@@ -3,17 +3,28 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /events/{eventId} {
+      // 表示画面は誰でも見られる
       allow read: if true;
-      allow write: if true;
 
+      // 新規作成: 認証済みかつ ownerId が自分の UID と一致
+      allow create: if request.auth != null
+                    && request.resource.data.ownerId == request.auth.uid;
+
+      // 更新/削除: 既存ドキュメントの ownerId が自分の UID と一致
+      allow update, delete: if request.auth != null
+                            && resource.data.ownerId == request.auth.uid;
+
+      // サブコレクション（programs, state）は親イベントの所有者のみ書き込み可
       match /programs/{programId} {
         allow read: if true;
-        allow write: if true;
+        allow write: if request.auth != null
+                     && get(/databases/$(database)/documents/events/$(eventId)).data.ownerId == request.auth.uid;
       }
 
       match /state/{stateId} {
         allow read: if true;
-        allow write: if true;
+        allow write: if request.auth != null
+                     && get(/databases/$(database)/documents/events/$(eventId)).data.ownerId == request.auth.uid;
       }
     }
   }
