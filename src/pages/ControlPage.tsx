@@ -509,6 +509,9 @@ function EventSettings({
   return (
     <section className="bg-slate-50 border border-slate-200 rounded-lg p-4 md:p-6 space-y-3">
       <h2 className="text-lg font-semibold text-slate-800">イベント設定</h2>
+      <div className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded p-2">
+        🔓 公開すると、ここに入力した内容はURLを知っている人なら誰でも閲覧できます。<strong>個人住所・電話番号などは入力しないでください。</strong>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <label className="md:col-span-2 space-y-1">
           <div className="text-xs text-slate-500">タイトル</div>
@@ -532,11 +535,11 @@ function EventSettings({
           </select>
         </label>
         <label className="md:col-span-3 space-y-1">
-          <div className="text-xs text-slate-500">場所</div>
+          <div className="text-xs text-slate-500">場所（個人住所NG・施設名のみ推奨）</div>
           <input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="例: ○○小学校 校庭"
+            placeholder="例: ○○小学校 校庭（番地は書かない）"
             className="w-full bg-white border border-slate-300 rounded px-3 py-2 text-sm text-slate-800"
           />
         </label>

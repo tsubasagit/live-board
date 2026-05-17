@@ -3,8 +3,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /events/{eventId} {
-      // 表示画面は誰でも見られる
-      allow read: if true;
+      // 単一イベントの読み取りは誰でも可（視聴者向け表示画面で使用）
+      allow get: if true;
+      // 全件一覧取得は禁止（外部スクレイピング対策）
+      allow list: if false;
 
       // 新規作成: 認証済みかつ ownerId が自分の UID と一致
       allow create: if request.auth != null
@@ -14,15 +16,16 @@ service cloud.firestore {
       allow update, delete: if request.auth != null
                             && resource.data.ownerId == request.auth.uid;
 
-      // サブコレクション（programs, state）は親イベントの所有者のみ書き込み可
+      // サブコレクション（programs, state）はeventIdが分かっている前提なので
+      // get/list 両方許可（表示画面でプログラム一覧を購読するため）
       match /programs/{programId} {
-        allow read: if true;
+        allow get, list: if true;
         allow write: if request.auth != null
                      && get(/databases/$(database)/documents/events/$(eventId)).data.ownerId == request.auth.uid;
       }
 
       match /state/{stateId} {
-        allow read: if true;
+        allow get, list: if true;
         allow write: if request.auth != null
                      && get(/databases/$(database)/documents/events/$(eventId)).data.ownerId == request.auth.uid;
       }
