@@ -56,6 +56,14 @@ npm run deploy # GitHub Pages へデプロイ（後日設定）
 ## リポジトリ
 
 - origin: https://github.com/tsubasagit/live-board（旧 school-live-board）
+- 公開リポジトリ。**コミット前に [SECURITY.md](./SECURITY.md) の「コミット前チェックリスト」を必ず実行**
+
+## GitHub 公開ルール（要約・詳細は SECURITY.md）
+
+- 🔴 絶対NG: `.env`, `*.pem`, `*.key`, service account JSON, 実在の個人情報, ATH業務メール（`*@apptalenthub.co.jp`）, APIトークン
+- 🟢 OK: `.env.example`（空テンプレ）, `firebase.json`, `.firebaserc`, `firestore.rules`, Firebase Web Config（apiKey含む・公開前提）
+- コミット作者メールは `tsubasa.pc3@gmail.com`（個人GitHubメール）固定。業務メールでコミットしない
+- コミット前: `git diff --staged | grep -E "AIza|ghp_|sk-|password|secret|@apptalenthub|東京都[一-龯]+市[0-9]"` で 0件確認
 
 ## 仕様書
 

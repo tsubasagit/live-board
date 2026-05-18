@@ -215,9 +215,9 @@ export default function HomePage() {
               「順番」と「進行中」を全員のスマホに同期する、シンプルな仕組み。
             </p>
             <img
-              src={`${base}og/use-cases.png`}
-              alt="運動会の体育館スクリーン、薬局の待合室の番号表示、飲食店の順番待ち表示、3シーンが同じUIで並ぶ"
-              className="w-full max-w-5xl mx-auto rounded-xl border border-slate-200"
+              src={`${base}og/use-cases-9.png`}
+              alt="運動会・文化祭・薬局・飲食店・美容室・歯科・結婚式・町内会・セミナーの9シーンを9マスのインフォグラフィックで紹介"
+              className="w-full max-w-3xl mx-auto rounded-xl border border-slate-200"
               loading="lazy"
             />
           </div>
