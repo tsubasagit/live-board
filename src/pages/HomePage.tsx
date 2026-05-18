@@ -42,6 +42,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 紹介動画 */}
+      <section className="bg-white border-t border-slate-200 py-12 md:py-20">
+        <div className="max-w-5xl mx-auto px-5 md:px-8 space-y-6">
+          <div className="text-center space-y-3">
+            <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
+              INTRO MOVIE
+            </div>
+            <h2 className="text-2xl md:text-4xl font-black text-slate-900">
+              LiveBoard 紹介動画
+            </h2>
+          </div>
+          <video
+            controls
+            preload="metadata"
+            poster={`${base}og/hero-parents.png`}
+            className="w-full rounded-2xl shadow-lg border border-slate-200 bg-slate-100"
+          >
+            <source src={`${base}videos/liveboard-intro.mp4`} type="video/mp4" />
+            お使いのブラウザは video タグに対応していません。
+          </video>
+          <p className="text-sm md:text-base text-slate-500 text-center leading-loose">
+            ※ イメージです。動画は生成AIで作成したもので、<br className="hidden md:inline" />
+            実際の表示画面のようにするにはカスタマイズが必要です。
+          </p>
+        </div>
+      </section>
+
       {/* CTA / 認証状態カード */}
       <div className="max-w-3xl w-full mx-auto px-5 md:px-8 py-10 md:py-14 space-y-6">
         {!isFirebaseConfigured && (
@@ -214,12 +241,6 @@ export default function HomePage() {
             <p className="text-lg md:text-xl text-slate-600 leading-loose max-w-2xl mx-auto">
               「順番」と「進行中」を全員のスマホに同期する、シンプルな仕組み。
             </p>
-            <img
-              src={`${base}og/use-cases-9.png`}
-              alt="運動会・文化祭・薬局・飲食店・美容室・歯科・結婚式・町内会・セミナーの9シーンを9マスのインフォグラフィックで紹介"
-              className="w-full max-w-3xl mx-auto rounded-xl border border-slate-200"
-              loading="lazy"
-            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
@@ -282,6 +303,31 @@ export default function HomePage() {
             </a>
             ください。
           </div>
+        </div>
+      </section>
+
+      {/* 使い方事例（9マスインフォグラフィック・締めくくり） */}
+      <section className="bg-slate-50 border-t border-slate-200 py-16 md:py-24">
+        <div className="max-w-5xl mx-auto px-5 md:px-8 space-y-8">
+          <div className="text-center space-y-4">
+            <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
+              EXAMPLES
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+              使い方事例
+            </h2>
+            <p className="text-base md:text-xl text-slate-600 leading-loose max-w-2xl mx-auto">
+              9つのシーンを一枚に。
+              <br className="hidden md:inline" />
+              あなたの現場に近いものを見つけてください。
+            </p>
+          </div>
+          <img
+            src={`${base}og/use-cases-9.png`}
+            alt="運動会・文化祭・薬局・飲食店・美容室・歯科・結婚式・町内会・セミナーの9シーンを9マスのインフォグラフィックで紹介"
+            className="w-full rounded-2xl border border-slate-200 shadow-md"
+            loading="lazy"
+          />
         </div>
       </section>
 

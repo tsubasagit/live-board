@@ -10,6 +10,12 @@
 
 公開URL: **https://tsubasagit.github.io/live-board/**
 
+## 紹介動画
+
+▶️ **[LiveBoard 紹介動画を見る（54秒・mp4）](https://tsubasagit.github.io/live-board/videos/liveboard-intro.mp4)**
+
+※ イメージです。動画は生成AIで作成したもので、実際の表示画面のようにするにはカスタマイズが必要です。
+
 ## 使える場面
 
 <p align="center">
