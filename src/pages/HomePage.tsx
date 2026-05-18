@@ -56,7 +56,7 @@ export default function HomePage() {
           <video
             controls
             preload="metadata"
-            poster={`${base}og/hero-parents.png`}
+            poster={`${base}videos/liveboard-intro-poster.jpg`}
             className="w-full rounded-2xl shadow-lg border border-slate-200 bg-slate-100"
           >
             <source src={`${base}videos/liveboard-intro.mp4`} type="video/mp4" />
