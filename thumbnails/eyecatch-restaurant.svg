@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid slice">
+  <!-- 写真 -->
+  <image href="../usecases/restaurant.png" x="0" y="0" width="1600" height="1200" preserveAspectRatio="xMidYMid slice" />
+
+  <!-- 左上：LiveBoard ロゴチップ -->
+  <g transform="translate(40 40)">
+    <rect width="280" height="72" rx="14" fill="white" opacity="0.96" />
+    <g transform="translate(36 36)">
+      <circle r="20" stroke="#538bb0" stroke-width="4" fill="none" />
+      <circle r="8" fill="#e74c3c" />
+    </g>
+    <text x="76" y="48" font-family="Inter, sans-serif" font-size="30" font-weight="800" fill="#0e2a47">LiveBoard</text>
+  </g>
+
+  <!-- 下部濃紺帯（高さ約30%） -->
+  <rect x="0" y="840" width="1600" height="360" fill="#0e2a47" opacity="0.96" />
+
+  <!-- 帯内テキスト -->
+  <g font-family="'Noto Sans JP', sans-serif">
+    <text x="80" y="940" font-size="32" font-weight="700" fill="#9bc4e2" letter-spacing="6">導入事例  ｜  飲食店</text>
+    <text x="80" y="1040" font-size="76" font-weight="900" fill="white">行列の「あと何組」が、</text>
+    <text x="80" y="1130" font-size="76" font-weight="900" fill="white">手元で見える。</text>
+  </g>
+</svg>

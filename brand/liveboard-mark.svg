@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- マークオンリー版（アイコン・ファビコン用） -->
+  <g transform="translate(100 100)">
+    <circle r="78" stroke="#9bc4e2" stroke-width="6" opacity="0.5" />
+    <circle r="54" stroke="#538bb0" stroke-width="7" />
+    <circle r="30" stroke="#0e2a47" stroke-width="7" />
+    <circle r="14" fill="#e74c3c" opacity="0.25" />
+    <circle r="10" fill="#e74c3c" />
+  </g>
+</svg>

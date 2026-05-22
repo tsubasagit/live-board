@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>LiveBoard 記事サムネ プレビュー（MarkShot用）</title>
+<style>
+  :root { --navy: #0e2a47; --primary: #538bb0; --accent: #9bc4e2; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1f2937; font-family: 'Noto Sans JP', system-ui, sans-serif; padding: 32px; }
+  h1 { color: white; font-size: 18px; margin-bottom: 8px; }
+  .note { color: #9ca3af; font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
+  .grid { display: flex; flex-direction: column; gap: 40px; }
+  .label { color: #d1d5db; font-size: 12px; margin-bottom: 8px; font-family: monospace; }
+
+  /* 1枚あたり 1600×1200（4:3） */
+  .thumb {
+    position: relative;
+    width: 1600px;
+    height: 1200px;
+    overflow: hidden;
+    border-radius: 0;
+    background: #000;
+  }
+  .thumb img.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.9);
+  }
+  .chip {
+    position: absolute;
+    top: 40px; left: 40px;
+    background: rgba(255,255,255,0.96);
+    border-radius: 14px;
+    padding: 16px 24px 16px 18px;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .chip .mark {
+    width: 40px; height: 40px;
+    border: 4px solid var(--primary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .chip .mark::after {
+    content: "";
+    width: 16px; height: 16px;
+    background: #e74c3c;
+    border-radius: 50%;
+  }
+  .chip .name { font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+
+  .band {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 360px;
+    background: rgba(14, 42, 71, 0.96);
+    backdrop-filter: blur(4px);
+    color: white;
+    padding: 56px 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .band .category {
+    font-size: 32px; font-weight: 700; color: var(--accent);
+    letter-spacing: 6px; margin-bottom: 24px;
+  }
+  .band .headline {
+    font-size: 76px; font-weight: 900; line-height: 1.2; color: white;
+  }
+</style>
+</head>
+<body>
+  <h1>LiveBoard 記事サムネ アイキャッチ プレビュー</h1>
+  <p class="note">
+    各サムネは <code>1600 × 1200 px (4:3)</code>。<br>
+    MarkShot で1枚ずつ要素キャプチャ → PNG として書き出し → AppTalentHub の事例記事に使用してください。
+  </p>
+
+  <div class="grid">
+    <div>
+      <div class="label">eyecatch-restaurant.png</div>
+      <div class="thumb" id="thumb-restaurant">
+        <img class="photo" src="../usecases/restaurant.png" alt="" />
+        <div class="chip"><div class="mark"></div><div class="name">LiveBoard</div></div>
+        <div class="band">
+          <div class="category">導入事例 ｜ 飲食店</div>
+          <div class="headline">行列の「あと何組」が、<br>手元で見える。</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">eyecatch-clinic.png</div>
+      <div class="thumb" id="thumb-clinic">
+        <img class="photo" src="../usecases/clinic.png" alt="" />
+        <div class="chip"><div class="mark"></div><div class="name">LiveBoard</div></div>
+        <div class="band">
+          <div class="category">導入事例 ｜ クリニック</div>
+          <div class="headline">待合室の番号が、<br>車内・近隣からも分かる。</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">eyecatch-government.png</div>
+      <div class="thumb" id="thumb-government">
+        <img class="photo" src="../usecases/government.png" alt="" />
+        <div class="chip"><div class="mark"></div><div class="name">LiveBoard</div></div>
+        <div class="band">
+          <div class="category">導入事例 ｜ 自治体窓口</div>
+          <div class="headline">呼び出し番号を、<br>ロビー全体にライブ表示。</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">eyecatch-sports.png</div>
+      <div class="thumb" id="thumb-sports">
+        <img class="photo" src="../usecases/sports.png" alt="" />
+        <div class="chip"><div class="mark"></div><div class="name">LiveBoard</div></div>
+        <div class="band">
+          <div class="category">導入事例 ｜ 運動会・スポーツ</div>
+          <div class="headline">進行プログラムを、<br>保護者全員のスマホへ。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
