@@ -349,121 +349,27 @@ export default function HomePage() {
             />
           </div>
 
-          {/* カスタマイズ案内＋料金目安＋既存サービス比較 */}
-          <div className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 md:p-10 space-y-6 md:space-y-8 mt-4">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-900 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold">
-                ⚠️ お読みください
+          {/* カスタマイズ案内（簡略版・ATH LPへ誘導） */}
+          <div className="bg-gradient-to-br from-[#0e2a47] to-[#3d6f94] text-white rounded-2xl p-6 md:p-10 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 md:gap-8 items-center">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 bg-white/15 text-white px-3 py-1.5 rounded-full text-xs md:text-sm font-bold backdrop-blur-sm">
+                  💡 上の写真は業種別カスタマイズ後のイメージです
+                </div>
+                <h3 className="text-xl md:text-3xl font-black leading-snug">
+                  自社専用UIに、買い切り¥30,000〜でカスタム可能。
+                </h3>
+                <p className="text-sm md:text-base text-white/85 leading-loose">
+                  クリニックの番号呼び出し画面、飲食店の順番待ちカウンター、自治体窓口の電子掲示板など、業種別UIへの開発受託を行っています。<strong className="text-white">月額¥0</strong>で運用可能、ソース所有（MITライセンス）。
+                </p>
               </div>
-              <h3 className="text-xl md:text-3xl font-black text-slate-900 leading-snug">
-                上の写真は「業種ごとにカスタマイズした場合のイメージ」です
-              </h3>
-              <p className="text-base md:text-lg text-slate-700 leading-loose">
-                LiveBoard は <strong>標準UI（運動会向け進行表示）</strong>のまま<strong>無料</strong>でご利用いただけます。<br />
-                上記のような番号呼び出し・順番待ち表示・業種特化レイアウトに変更したい場合は、<strong>個別カスタマイズ開発を順次受付中</strong>です。
-                <br />
-                <span className="text-sm text-slate-500">
-                  ※ ソースコードは GitHub に公開（MITライセンス）。ご自身で改修されたい方も歓迎します。
-                </span>
-              </p>
-            </div>
-
-            {/* 料金目安 */}
-            <div className="space-y-3">
-              <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
-                CUSTOMIZATION PRICING
-              </div>
-              <h4 className="text-lg md:text-2xl font-bold text-slate-900">カスタマイズ料金目安</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-                <PriceCard
-                  label="ライト"
-                  price="¥30,000〜"
-                  body="ロゴ／カラー／文言の差し替え、お店ロゴ表示、業種に合った絵文字・項目調整"
-                  delivery="納期 3〜5営業日"
-                />
-                <PriceCard
-                  label="スタンダード"
-                  price="¥100,000〜"
-                  highlight
-                  body="番号呼び出し画面、順番待ちカウンター、待ち時間予測表示など、業種別UIの新規開発"
-                  delivery="納期 2〜3週間"
-                />
-                <PriceCard
-                  label="フル"
-                  price="¥500,000〜"
-                  body="独自ドメイン運用、複数拠点同期、QR発券・予約システム連携、外部API連携など"
-                  delivery="納期 1〜2ヶ月"
-                />
-              </div>
-              <p className="text-xs md:text-sm text-slate-500 leading-relaxed">
-                ※ 上記は目安です。ヒアリング後、無料お見積もりを発行します。 Firebase 無料枠で運用可能な範囲なら月額ランニング ¥0 を維持できます。
-              </p>
-            </div>
-
-            {/* 既存サービスとの比較 */}
-            <div className="space-y-3">
-              <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
-                COST COMPARISON
-              </div>
-              <h4 className="text-lg md:text-2xl font-bold text-slate-900">既存の順番待ち管理サービスとの3年総額比較</h4>
-              <div className="overflow-x-auto -mx-2 md:mx-0">
-                <table className="w-full text-sm md:text-base border-collapse min-w-[560px]">
-                  <thead>
-                    <tr className="bg-slate-100 text-slate-700">
-                      <th className="text-left px-3 md:px-4 py-3 border-b border-slate-200 font-bold">サービス形態</th>
-                      <th className="text-right px-3 md:px-4 py-3 border-b border-slate-200 font-bold">初期費用</th>
-                      <th className="text-right px-3 md:px-4 py-3 border-b border-slate-200 font-bold">月額</th>
-                      <th className="text-right px-3 md:px-4 py-3 border-b border-slate-200 font-bold">3年総額</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-slate-700">
-                    <tr>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200">一般的な順番待ちSaaS（A社）</td>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥50,000</td>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥10,000</td>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">約 <strong>¥410,000</strong></td>
-                    </tr>
-                    <tr>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200">業務用呼び出しシステム（端末＋月額）</td>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥200,000</td>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥8,000</td>
-                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">約 <strong>¥488,000</strong></td>
-                    </tr>
-                    <tr className="bg-[#538bb0]/5">
-                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] font-bold text-[#0e2a47]">LiveBoard（スタンダードCustom + 自社運用）</td>
-                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] text-right font-bold">¥100,000〜</td>
-                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] text-right font-bold text-[#538bb0]">¥0</td>
-                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] text-right font-black text-[#538bb0]">約 ¥100,000〜</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-4 md:p-5 text-sm md:text-base text-slate-700 leading-loose">
-                <strong className="text-[#0e2a47]">判断目安：</strong>
-                月額継続のSaaSは <strong>1〜1.5年で初期費用ペイ</strong>するイメージ。
-                LiveBoard カスタマイズは初期は同程度でも <strong>月額¥0 のため、長く使うほど差が広がります</strong>。
-                さらにソースを所有するため <strong>サービス停止リスクなし</strong>・<strong>業務に合わせた追加改修も自由</strong>。
-                逆に、サポート窓口・SLA・大規模拠点運用を求める場合は既存SaaSのほうが安心です。
-              </div>
-            </div>
-
-            {/* CTA */}
-            <div className="flex flex-col md:flex-row gap-3 md:gap-4 pt-2">
               <a
-                href="https://forms.apptalenthub.co.jp/contact?utm_source=live-board&utm_medium=customize"
+                href="https://apptalenthub.co.jp/lp/liveboard-custom/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-[#538bb0] hover:bg-[#3d6f94] text-white px-6 py-4 rounded-xl text-center font-bold text-base md:text-lg transition-colors"
+                className="shrink-0 bg-white text-[#0e2a47] hover:bg-slate-100 px-6 md:px-8 py-4 md:py-5 rounded-xl font-bold text-base md:text-lg transition-colors text-center whitespace-nowrap"
               >
-                💬 カスタマイズを相談する（無料お見積もり）
-              </a>
-              <a
-                href="https://github.com/tsubasagit/live-board"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 border-2 border-[#538bb0] text-[#538bb0] hover:bg-[#538bb0] hover:text-white px-6 py-4 rounded-xl text-center font-bold text-base md:text-lg transition-colors"
-              >
-                ⚙️ GitHubでソースを見る（MIT）
+                料金・事例を見る →
               </a>
             </div>
           </div>
@@ -512,48 +418,6 @@ function SceneCard({
         </div>
       </figcaption>
     </figure>
-  )
-}
-
-function PriceCard({
-  label,
-  price,
-  body,
-  delivery,
-  highlight,
-}: {
-  label: string
-  price: string
-  body: string
-  delivery: string
-  highlight?: boolean
-}) {
-  return (
-    <div
-      className={`rounded-xl p-5 md:p-6 space-y-2 border-2 ${
-        highlight
-          ? 'bg-white border-[#538bb0] shadow-md'
-          : 'bg-white border-slate-200'
-      }`}
-    >
-      <div className="flex items-center justify-between gap-2">
-        <div className={`text-xs md:text-sm font-bold tracking-widest ${
-          highlight ? 'text-[#538bb0]' : 'text-slate-500'
-        }`}>
-          {label}
-        </div>
-        {highlight && (
-          <span className="text-[10px] md:text-xs bg-[#538bb0] text-white px-2 py-0.5 rounded-full font-bold">
-            人気
-          </span>
-        )}
-      </div>
-      <div className="text-2xl md:text-3xl font-black text-slate-900">{price}</div>
-      <div className="text-xs md:text-sm text-slate-500">{delivery}</div>
-      <div className="text-sm md:text-base text-slate-700 leading-relaxed pt-1 border-t border-slate-100 mt-2">
-        {body}
-      </div>
-    </div>
   )
 }
 
