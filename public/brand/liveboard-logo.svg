@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" fill="none">
+  <!-- Mark: 中央のドット＋3重の同期パルス -->
+  <g transform="translate(100 100)">
+    <!-- 外周パルス（薄） -->
+    <circle r="78" stroke="#9bc4e2" stroke-width="6" opacity="0.5" />
+    <!-- 中周パルス -->
+    <circle r="54" stroke="#538bb0" stroke-width="7" />
+    <!-- 内周パルス（濃紺） -->
+    <circle r="30" stroke="#0e2a47" stroke-width="7" />
+    <!-- 中心のLIVEドット -->
+    <circle r="10" fill="#e74c3c" />
+    <!-- LIVE インジケータの呼吸感を出す薄いハロー -->
+    <circle r="14" fill="#e74c3c" opacity="0.25" />
+  </g>
+
+  <!-- ワードマーク: LiveBoard -->
+  <g font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-weight="800">
+    <text x="210" y="120" font-size="78" fill="#538bb0" letter-spacing="-2">Live</text>
+    <text x="370" y="120" font-size="78" fill="#0e2a47" letter-spacing="-2">Board</text>
+  </g>
+
+  <!-- タグライン -->
+  <text x="212" y="150" font-family="'Noto Sans JP', system-ui, sans-serif"
+        font-size="14" font-weight="600" fill="#64748b" letter-spacing="4">
+    REAL-TIME SYNC BOARD
+  </text>
+</svg>

@@ -306,32 +306,253 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 使い方事例（9マスインフォグラフィック・締めくくり） */}
-      <section className="bg-slate-50 border-t border-slate-200 py-16 md:py-24">
-        <div className="max-w-5xl mx-auto px-5 md:px-8 space-y-8">
-          <div className="text-center space-y-4">
+      {/* 実際の使用シーン（リアル写真サムネ・案A帯デザイン） */}
+      <section className="bg-white border-t border-slate-200 py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-5 md:px-8 space-y-10 md:space-y-14">
+          <div className="text-center space-y-4 md:space-y-6">
             <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
-              EXAMPLES
+              IN ACTION
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
-              使い方事例
+              実際の使用シーン
             </h2>
             <p className="text-base md:text-xl text-slate-600 leading-loose max-w-2xl mx-auto">
-              9つのシーンを一枚に。
-              <br className="hidden md:inline" />
-              あなたの現場に近いものを見つけてください。
+              現場で「今、何番」が伝わる瞬間。<br className="hidden md:inline" />
+              ４つの業種でのリアルな使われ方をご覧ください。
             </p>
           </div>
-          <img
-            src={`${base}og/use-cases-9.png`}
-            alt="運動会・文化祭・薬局・飲食店・美容室・歯科・結婚式・町内会・セミナーの9シーンを9マスのインフォグラフィックで紹介"
-            className="w-full rounded-2xl border border-slate-200 shadow-md"
-            loading="lazy"
-          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <SceneCard
+              src={`${base}usecases/restaurant.png`}
+              category="飲食店"
+              headline="行列の「あと何組」が、手元で見える"
+              alt="ラーメン店の行列に並ぶ人々と、手前のスマホに表示された「23組目／約50分」の順番待ち画面"
+            />
+            <SceneCard
+              src={`${base}usecases/clinic.png`}
+              category="クリニック"
+              headline="待合室の番号が、車内・近隣からも分かる"
+              alt="クリニックの待合室。壁掛けモニタに「診察中／お待ちの方」の番号一覧が表示され、患者が落ち着いて待機している"
+            />
+            <SceneCard
+              src={`${base}usecases/government.png`}
+              category="自治体窓口"
+              headline="呼び出し番号を、ロビー全体にライブ表示"
+              alt="自治体窓口のロビー。電子掲示板に「お呼び出し番号 105／お待ちの人数 23人」が大きく表示されている"
+            />
+            <SceneCard
+              src={`${base}usecases/sports.png`}
+              category="運動会・スポーツ"
+              headline="進行プログラムを、保護者全員のスマホへ"
+              alt="運動会の校庭で、手に持ったスマホに当日のプログラム一覧と進行状況がリアルタイムで表示されている"
+            />
+          </div>
+
+          {/* カスタマイズ案内＋料金目安＋既存サービス比較 */}
+          <div className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 md:p-10 space-y-6 md:space-y-8 mt-4">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-900 px-3 py-1.5 rounded-full text-xs md:text-sm font-bold">
+                ⚠️ お読みください
+              </div>
+              <h3 className="text-xl md:text-3xl font-black text-slate-900 leading-snug">
+                上の写真は「業種ごとにカスタマイズした場合のイメージ」です
+              </h3>
+              <p className="text-base md:text-lg text-slate-700 leading-loose">
+                LiveBoard は <strong>標準UI（運動会向け進行表示）</strong>のまま<strong>無料</strong>でご利用いただけます。<br />
+                上記のような番号呼び出し・順番待ち表示・業種特化レイアウトに変更したい場合は、<strong>個別カスタマイズ開発を順次受付中</strong>です。
+                <br />
+                <span className="text-sm text-slate-500">
+                  ※ ソースコードは GitHub に公開（MITライセンス）。ご自身で改修されたい方も歓迎します。
+                </span>
+              </p>
+            </div>
+
+            {/* 料金目安 */}
+            <div className="space-y-3">
+              <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
+                CUSTOMIZATION PRICING
+              </div>
+              <h4 className="text-lg md:text-2xl font-bold text-slate-900">カスタマイズ料金目安</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                <PriceCard
+                  label="ライト"
+                  price="¥30,000〜"
+                  body="ロゴ／カラー／文言の差し替え、お店ロゴ表示、業種に合った絵文字・項目調整"
+                  delivery="納期 3〜5営業日"
+                />
+                <PriceCard
+                  label="スタンダード"
+                  price="¥100,000〜"
+                  highlight
+                  body="番号呼び出し画面、順番待ちカウンター、待ち時間予測表示など、業種別UIの新規開発"
+                  delivery="納期 2〜3週間"
+                />
+                <PriceCard
+                  label="フル"
+                  price="¥500,000〜"
+                  body="独自ドメイン運用、複数拠点同期、QR発券・予約システム連携、外部API連携など"
+                  delivery="納期 1〜2ヶ月"
+                />
+              </div>
+              <p className="text-xs md:text-sm text-slate-500 leading-relaxed">
+                ※ 上記は目安です。ヒアリング後、無料お見積もりを発行します。 Firebase 無料枠で運用可能な範囲なら月額ランニング ¥0 を維持できます。
+              </p>
+            </div>
+
+            {/* 既存サービスとの比較 */}
+            <div className="space-y-3">
+              <div className="text-sm md:text-base text-[#538bb0] font-bold tracking-widest">
+                COST COMPARISON
+              </div>
+              <h4 className="text-lg md:text-2xl font-bold text-slate-900">既存の順番待ち管理サービスとの3年総額比較</h4>
+              <div className="overflow-x-auto -mx-2 md:mx-0">
+                <table className="w-full text-sm md:text-base border-collapse min-w-[560px]">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700">
+                      <th className="text-left px-3 md:px-4 py-3 border-b border-slate-200 font-bold">サービス形態</th>
+                      <th className="text-right px-3 md:px-4 py-3 border-b border-slate-200 font-bold">初期費用</th>
+                      <th className="text-right px-3 md:px-4 py-3 border-b border-slate-200 font-bold">月額</th>
+                      <th className="text-right px-3 md:px-4 py-3 border-b border-slate-200 font-bold">3年総額</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-slate-700">
+                    <tr>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200">一般的な順番待ちSaaS（A社）</td>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥50,000</td>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥10,000</td>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">約 <strong>¥410,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200">業務用呼び出しシステム（端末＋月額）</td>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥200,000</td>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">¥8,000</td>
+                      <td className="px-3 md:px-4 py-3 border-b border-slate-200 text-right">約 <strong>¥488,000</strong></td>
+                    </tr>
+                    <tr className="bg-[#538bb0]/5">
+                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] font-bold text-[#0e2a47]">LiveBoard（スタンダードCustom + 自社運用）</td>
+                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] text-right font-bold">¥100,000〜</td>
+                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] text-right font-bold text-[#538bb0]">¥0</td>
+                      <td className="px-3 md:px-4 py-3 border-b-2 border-[#538bb0] text-right font-black text-[#538bb0]">約 ¥100,000〜</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-xl p-4 md:p-5 text-sm md:text-base text-slate-700 leading-loose">
+                <strong className="text-[#0e2a47]">判断目安：</strong>
+                月額継続のSaaSは <strong>1〜1.5年で初期費用ペイ</strong>するイメージ。
+                LiveBoard カスタマイズは初期は同程度でも <strong>月額¥0 のため、長く使うほど差が広がります</strong>。
+                さらにソースを所有するため <strong>サービス停止リスクなし</strong>・<strong>業務に合わせた追加改修も自由</strong>。
+                逆に、サポート窓口・SLA・大規模拠点運用を求める場合は既存SaaSのほうが安心です。
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4 pt-2">
+              <a
+                href="https://forms.apptalenthub.co.jp/contact?utm_source=live-board&utm_medium=customize"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-[#538bb0] hover:bg-[#3d6f94] text-white px-6 py-4 rounded-xl text-center font-bold text-base md:text-lg transition-colors"
+              >
+                💬 カスタマイズを相談する（無料お見積もり）
+              </a>
+              <a
+                href="https://github.com/tsubasagit/live-board"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 border-2 border-[#538bb0] text-[#538bb0] hover:bg-[#538bb0] hover:text-white px-6 py-4 rounded-xl text-center font-bold text-base md:text-lg transition-colors"
+              >
+                ⚙️ GitHubでソースを見る（MIT）
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
       <AthFooter />
+    </div>
+  )
+}
+
+function SceneCard({
+  src,
+  category,
+  headline,
+  alt,
+}: {
+  src: string
+  category: string
+  headline: string
+  alt: string
+}) {
+  return (
+    <figure className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-shadow group">
+      <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+      {/* 左上チップ：live-board ラベル */}
+      <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-sm">
+        <div className="text-[10px] md:text-xs font-bold text-[#538bb0] tracking-widest">
+          LIVEBOARD
+        </div>
+      </div>
+      {/* 下部濃紺帯：導入事例 / 業種 / 一文要約 */}
+      <figcaption className="absolute bottom-0 left-0 right-0 bg-[#0e2a47]/95 backdrop-blur-sm text-white px-5 md:px-6 py-4 md:py-5">
+        <div className="text-[11px] md:text-xs font-bold text-[#9bc4e2] tracking-widest mb-1">
+          導入事例 ｜ {category}
+        </div>
+        <div className="text-base md:text-lg font-bold leading-snug">
+          {headline}
+        </div>
+      </figcaption>
+    </figure>
+  )
+}
+
+function PriceCard({
+  label,
+  price,
+  body,
+  delivery,
+  highlight,
+}: {
+  label: string
+  price: string
+  body: string
+  delivery: string
+  highlight?: boolean
+}) {
+  return (
+    <div
+      className={`rounded-xl p-5 md:p-6 space-y-2 border-2 ${
+        highlight
+          ? 'bg-white border-[#538bb0] shadow-md'
+          : 'bg-white border-slate-200'
+      }`}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className={`text-xs md:text-sm font-bold tracking-widest ${
+          highlight ? 'text-[#538bb0]' : 'text-slate-500'
+        }`}>
+          {label}
+        </div>
+        {highlight && (
+          <span className="text-[10px] md:text-xs bg-[#538bb0] text-white px-2 py-0.5 rounded-full font-bold">
+            人気
+          </span>
+        )}
+      </div>
+      <div className="text-2xl md:text-3xl font-black text-slate-900">{price}</div>
+      <div className="text-xs md:text-sm text-slate-500">{delivery}</div>
+      <div className="text-sm md:text-base text-slate-700 leading-relaxed pt-1 border-t border-slate-100 mt-2">
+        {body}
+      </div>
     </div>
   )
 }
