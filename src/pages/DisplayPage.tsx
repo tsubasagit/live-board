@@ -37,14 +37,7 @@ export default function DisplayPage() {
   const template = normalizeEventType(event?.eventType ?? 'program_timeline')
 
   if (template === 'calling_number') {
-    return (
-      <CallingNumberDisplay
-        event={event}
-        cur={cur}
-        programs={programs}
-        currentProgramId={currentProgramId}
-      />
-    )
+    return <CallingNumberDisplay event={event} cur={cur} programs={programs} />
   }
   if (template === 'queue_counter') {
     return <QueueCounterDisplay event={event} programs={programs} />
@@ -206,18 +199,19 @@ function CallingNumberDisplay({
   event,
   cur,
   programs,
-  currentProgramId,
 }: {
   event: SchoolEvent | null
   cur: Program | null
   programs: Program[]
-  currentProgramId: string | null
 }) {
-  const nextThree = useMemo(() => {
-    const curIndex = programs.findIndex((p) => p.id === currentProgramId)
-    const start = curIndex >= 0 ? curIndex + 1 : 0
-    return programs.slice(start, start + 3).filter((p) => p.status !== 'done')
-  }, [programs, currentProgramId])
+  const called = useMemo(
+    () => programs.filter((p) => p.status === 'done').slice(-6),
+    [programs]
+  )
+  const upcoming = useMemo(
+    () => programs.filter((p) => p.status === 'upcoming').slice(0, 6),
+    [programs]
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0e2a47] to-[#1e40af] text-white flex flex-col">
@@ -231,13 +225,13 @@ function CallingNumberDisplay({
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-10 text-center">
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-8 text-center">
         {cur ? (
-          <div className="space-y-4 md:space-y-8 fade-in-up" key={cur.id}>
+          <div className="space-y-3 md:space-y-6 fade-in-up" key={cur.id}>
             <div className="text-base md:text-2xl text-[#9bc4e2] font-bold tracking-widest">
               ただいまの番号
             </div>
-            <div className="text-[20vw] md:text-[16rem] leading-none font-black tracking-tighter">
+            <div className="text-[18vw] md:text-[14rem] leading-none font-black tracking-tighter">
               {cur.title || '—'}
             </div>
             {cur.description && (
@@ -251,23 +245,58 @@ function CallingNumberDisplay({
             まもなく呼び出しを開始します
           </div>
         )}
-
-        {nextThree.length > 0 && (
-          <div className="mt-10 md:mt-16 flex items-center gap-3 md:gap-6 flex-wrap justify-center">
-            <span className="text-sm md:text-lg tracking-widest font-bold text-white/60">
-              NEXT
-            </span>
-            {nextThree.map((p) => (
-              <span
-                key={p.id}
-                className="bg-white/15 border border-white/20 rounded-xl px-4 md:px-6 py-2 md:py-3 text-2xl md:text-4xl font-black tracking-tight"
-              >
-                {p.title || '—'}
-              </span>
-            ))}
-          </div>
-        )}
       </main>
+
+      {/* 呼び出し済み・お待ちの番号 2セクション */}
+      <section className="px-4 md:px-10 pb-8 md:pb-12 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-6xl w-full mx-auto">
+        {/* 呼び出し済み */}
+        <div className="bg-white/8 border border-white/15 rounded-2xl p-5 md:p-7 backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-3 md:mb-4">
+            <div className="text-sm md:text-base text-white/70 font-bold tracking-widest">
+              ✓ 呼び出し済み
+            </div>
+            <div className="text-xs text-white/40">CALLED</div>
+          </div>
+          {called.length === 0 ? (
+            <div className="text-white/40 text-sm py-4">まだ呼び出し済みの番号はありません</div>
+          ) : (
+            <div className="flex flex-wrap gap-2 md:gap-3">
+              {called.map((p) => (
+                <span
+                  key={p.id}
+                  className="bg-white/10 border border-white/15 rounded-lg px-3 md:px-4 py-2 md:py-2.5 text-xl md:text-3xl font-black tracking-tight text-white/50 line-through decoration-2"
+                >
+                  {p.title || '—'}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* お待ちの番号 */}
+        <div className="bg-white/15 border border-white/30 rounded-2xl p-5 md:p-7 backdrop-blur-sm shadow-2xl">
+          <div className="flex items-center justify-between mb-3 md:mb-4">
+            <div className="text-sm md:text-base text-[#fde047] font-bold tracking-widest">
+              ⏳ お待ちの番号
+            </div>
+            <div className="text-xs text-white/60">WAITING</div>
+          </div>
+          {upcoming.length === 0 ? (
+            <div className="text-white/50 text-sm py-4">お待ちの番号はありません</div>
+          ) : (
+            <div className="flex flex-wrap gap-2 md:gap-3">
+              {upcoming.map((p) => (
+                <span
+                  key={p.id}
+                  className="bg-white/20 border-2 border-white/30 rounded-lg px-3 md:px-4 py-2 md:py-2.5 text-xl md:text-3xl font-black tracking-tight text-white"
+                >
+                  {p.title || '—'}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
       <AthFooter />
     </div>

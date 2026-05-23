@@ -198,6 +198,7 @@ export default function ControlPage() {
           programs={programs}
           currentProgramId={current?.currentProgramId ?? null}
           onJump={handleJump}
+          template={normalizeEventType(event?.eventType ?? 'program_timeline')}
         />
 
         <AddProgramForm eventId={eventId} nextOrder={programs.length + 1} />
@@ -658,12 +659,126 @@ function ProgramsList({
   programs,
   currentProgramId,
   onJump,
+  template,
 }: {
   eventId: string
   programs: Program[]
   currentProgramId: string | null
   onJump: (id: string) => void
+  template?: 'program_timeline' | 'calling_number' | 'queue_counter'
 }) {
+  // calling_number テンプレ時は status 別の3セクション表示
+  if (template === 'calling_number') {
+    const called = programs.filter((p) => p.status === 'done')
+    const current = programs.find((p) => p.id === currentProgramId) ?? null
+    const upcoming = programs.filter((p) => p.status === 'upcoming')
+
+    return (
+      <section className="bg-slate-50 border border-slate-200 rounded-lg p-4 md:p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-800">番号管理（薬局・クリニック等）</h2>
+          <span className="text-xs text-slate-500">
+            計 {programs.length} 件
+          </span>
+        </div>
+        {programs.length === 0 && (
+          <p className="text-sm text-slate-500">
+            まだ番号が登録されていません。下のフォームから「101」「102」…のように番号を追加してください。
+          </p>
+        )}
+
+        {/* 進行中（呼び出し中の番号） */}
+        {current && (
+          <div className="bg-[#538bb0]/10 border-2 border-[#538bb0] rounded-lg p-4">
+            <div className="text-xs font-bold text-[#538bb0] tracking-widest mb-2">
+              ● 呼び出し中
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-3xl md:text-4xl font-black text-slate-800">
+                {current.title || '—'}
+              </div>
+              {current.description && (
+                <div className="text-base text-slate-600 truncate">{current.description}</div>
+              )}
+              <button
+                onClick={() => {
+                  if (confirm(`「${current.title}」を削除しますか？`)) {
+                    deleteProgram(eventId, current.id)
+                  }
+                }}
+                className="text-slate-400 hover:text-red-500 p-1 shrink-0"
+                title="削除"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* お待ちの番号 */}
+        <div className="bg-white border border-amber-200 rounded-lg p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="text-xs font-bold text-amber-700 tracking-widest">
+              ⏳ お待ちの番号（クリックで呼び出し）
+            </div>
+            <span className="text-xs text-slate-500">{upcoming.length} 件</span>
+          </div>
+          {upcoming.length === 0 ? (
+            <p className="text-sm text-slate-400">お待ちの番号はありません</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {upcoming.map((p) => (
+                <NumberChip
+                  key={p.id}
+                  label={p.title || '—'}
+                  sub={p.description}
+                  onClick={() => onJump(p.id)}
+                  onDelete={() => {
+                    if (confirm(`「${p.title}」を削除しますか？`)) {
+                      deleteProgram(eventId, p.id)
+                    }
+                  }}
+                  variant="upcoming"
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 呼び出し済み */}
+        <div className="bg-white border border-slate-200 rounded-lg p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="text-xs font-bold text-slate-500 tracking-widest">
+              ✓ 呼び出し済み（クリックで再呼び出し）
+            </div>
+            <span className="text-xs text-slate-500">{called.length} 件</span>
+          </div>
+          {called.length === 0 ? (
+            <p className="text-sm text-slate-400">まだ呼び出し済みの番号はありません</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {called.map((p) => (
+                <NumberChip
+                  key={p.id}
+                  label={p.title || '—'}
+                  sub={p.description}
+                  onClick={() => onJump(p.id)}
+                  onDelete={() => {
+                    if (confirm(`「${p.title}」を削除しますか？`)) {
+                      deleteProgram(eventId, p.id)
+                    }
+                  }}
+                  variant="called"
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  // 既存：プログラム順表示（program_timeline / queue_counter）
   return (
     <section className="bg-slate-50 border border-slate-200 rounded-lg p-4 md:p-6 space-y-3">
       <h2 className="text-lg font-semibold text-slate-800">プログラム一覧</h2>
@@ -712,6 +827,48 @@ function ProgramsList({
         })}
       </ul>
     </section>
+  )
+}
+
+function NumberChip({
+  label,
+  sub,
+  onClick,
+  onDelete,
+  variant,
+}: {
+  label: string
+  sub?: string
+  onClick: () => void
+  onDelete: () => void
+  variant: 'upcoming' | 'called'
+}) {
+  const base =
+    variant === 'upcoming'
+      ? 'bg-amber-50 border-2 border-amber-300 hover:bg-amber-100 hover:border-amber-400 text-slate-800'
+      : 'bg-slate-100 border border-slate-300 hover:bg-slate-200 text-slate-500 line-through decoration-2'
+  return (
+    <div className={`relative group rounded-lg overflow-hidden ${base} transition-colors`}>
+      <button
+        onClick={onClick}
+        className="px-4 py-2 pr-9 text-2xl md:text-3xl font-black tracking-tight text-left"
+        title={variant === 'upcoming' ? 'クリックで呼び出し' : 'クリックで再呼び出し'}
+      >
+        {label}
+        {sub && (
+          <span className="ml-2 text-xs font-normal text-slate-500 no-underline align-middle">
+            {sub}
+          </span>
+        )}
+      </button>
+      <button
+        onClick={onDelete}
+        className="absolute top-1 right-1 p-1 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+        title="削除"
+      >
+        <Trash2 size={12} />
+      </button>
+    </div>
   )
 }
 
