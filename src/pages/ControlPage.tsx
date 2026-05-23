@@ -495,6 +495,7 @@ function EventSettings({
   const [description, setDescription] = useState(eventDescription)
   const [location, setLocation] = useState(eventLocation)
   const [type, setType] = useState<EventType>(eventType)
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   useEffect(() => setTitle(eventTitle), [eventTitle])
   useEffect(() => setDescription(eventDescription), [eventDescription])
@@ -502,14 +503,23 @@ function EventSettings({
   useEffect(() => setType(eventType), [eventType])
 
   const handleSave = async () => {
-    await saveEvent({
-      id: eventId,
-      title: title || '無題のイベント',
-      description,
-      location,
-      eventType: type,
-      startDate: new Date().toISOString().slice(0, 10),
-    })
+    setSaveState('saving')
+    try {
+      await saveEvent({
+        id: eventId,
+        title: title || '無題のイベント',
+        description,
+        location,
+        eventType: type,
+        startDate: new Date().toISOString().slice(0, 10),
+      })
+      setSaveState('saved')
+      window.setTimeout(() => setSaveState('idle'), 2400)
+    } catch (e) {
+      console.error('saveEvent failed', e)
+      setSaveState('error')
+      window.setTimeout(() => setSaveState('idle'), 3500)
+    }
   }
 
   return (
@@ -569,12 +579,34 @@ function EventSettings({
           />
         </label>
       </div>
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end gap-3">
+        {saveState === 'saved' && (
+          <span className="text-sm text-green-700 font-bold animate-pulse">
+            ✓ 保存しました
+          </span>
+        )}
+        {saveState === 'error' && (
+          <span className="text-sm text-red-600 font-bold">
+            ⚠️ 保存に失敗しました。再試行してください
+          </span>
+        )}
         <button
           onClick={handleSave}
-          className="bg-[#538bb0] hover:bg-[#3d6f94] text-white px-4 py-1.5 rounded text-sm font-bold"
+          disabled={saveState === 'saving'}
+          className={`px-5 py-2 rounded text-sm font-bold text-white transition-all duration-200 min-w-[120px] ${
+            saveState === 'saving'
+              ? 'bg-slate-400 cursor-wait'
+              : saveState === 'saved'
+              ? 'bg-green-600 hover:bg-green-700 scale-105 shadow-lg shadow-green-200'
+              : saveState === 'error'
+              ? 'bg-red-600 hover:bg-red-700'
+              : 'bg-[#538bb0] hover:bg-[#3d6f94]'
+          }`}
         >
-          保存
+          {saveState === 'saving' && '保存中…'}
+          {saveState === 'saved' && '✓ 保存完了'}
+          {saveState === 'error' && '再試行'}
+          {saveState === 'idle' && '保存'}
         </button>
       </div>
     </section>
