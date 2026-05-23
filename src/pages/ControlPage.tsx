@@ -22,7 +22,7 @@ import {
   setEventPublished,
   updateProgramStatus,
 } from '@/lib/sync'
-import type { EventType, Program, SchoolEvent, ViewSettings } from '@/types'
+import { normalizeEventType, type EventType, type Program, type SchoolEvent, type ViewSettings } from '@/types'
 
 export default function ControlPage() {
   const [searchParams] = useSearchParams()
@@ -529,15 +529,24 @@ function EventSettings({
           />
         </label>
         <label className="space-y-1">
-          <div className="text-xs text-slate-500">種別</div>
+          <div className="text-xs text-slate-500">
+            デザインテンプレート
+            <span className="text-slate-400 ml-1">（表示画面の見せ方）</span>
+          </div>
           <select
-            value={type}
+            value={normalizeEventType(type)}
             onChange={(e) => setType(e.target.value as EventType)}
             className="w-full bg-white border border-slate-300 rounded px-3 py-2 text-sm text-slate-800"
           >
-            <option value="sports_day">運動会</option>
-            <option value="culture_festival">文化祭</option>
-            <option value="generic">汎用</option>
+            <option value="program_timeline">
+              プログラム進行型（運動会・式典・セミナー）
+            </option>
+            <option value="calling_number">
+              番号呼び出し型（クリニック・薬局・自治体）
+            </option>
+            <option value="queue_counter">
+              順番待ちカウンター型（飲食店・サロン）
+            </option>
           </select>
         </label>
         <label className="md:col-span-3 space-y-1">

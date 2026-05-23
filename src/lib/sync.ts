@@ -101,7 +101,7 @@ export async function ensureEventExists(eventId: string, ownerId: string) {
     ownerId,
     createdAt: new Date().toISOString(),
     title: '',
-    eventType: 'sports_day',
+    eventType: 'program_timeline',
     startDate: new Date().toISOString().slice(0, 10),
     published: false,
   })
