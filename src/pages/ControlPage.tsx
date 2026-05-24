@@ -48,6 +48,9 @@ export default function ControlPage() {
   const next = useMemo(() => nextProgram(programs, current), [programs, current])
   const prev = useMemo(() => previousProgram(programs, current), [programs, current])
 
+  // サンプル投入ボタンの状態（必ず早期return の前に宣言する）
+  const [seedState, setSeedState] = useState<'idle' | 'loading' | 'done'>('idle')
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white text-slate-500">
@@ -81,8 +84,6 @@ export default function ControlPage() {
     await setCurrentProgram(eventId, programId)
     track.programJump()
   }
-
-  const [seedState, setSeedState] = useState<'idle' | 'loading' | 'done'>('idle')
 
   const handleLoadSample = async (
     template: 'program_timeline' | 'calling_number'
