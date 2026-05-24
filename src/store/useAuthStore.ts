@@ -7,6 +7,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { getFirebaseAuth, isFirebaseConfigured } from '@/lib/firebase'
+import { track } from '@/lib/analytics'
 
 interface AuthState {
   user: User | null
@@ -40,6 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const provider = new GoogleAuthProvider()
       await signInWithPopup(getFirebaseAuth(), provider)
       set({ error: null })
+      track.signIn()
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e)
       set({ error: msg })
@@ -48,5 +50,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signOut: async () => {
     await fbSignOut(getFirebaseAuth())
+    track.signOut()
   },
 }))

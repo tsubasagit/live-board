@@ -23,6 +23,7 @@ import {
   updateProgramStatus,
 } from '@/lib/sync'
 import { normalizeEventType, type EventType, type Program, type SchoolEvent, type ViewSettings } from '@/types'
+import { track } from '@/lib/analytics'
 
 export default function ControlPage() {
   const [searchParams] = useSearchParams()
@@ -69,6 +70,7 @@ export default function ControlPage() {
     }
     await updateProgramStatus(eventId, target.id, 'current')
     await setCurrentProgram(eventId, target.id)
+    track.programAdvance(direction)
   }
 
   const handleJump = async (programId: string) => {
@@ -77,6 +79,7 @@ export default function ControlPage() {
     }
     await updateProgramStatus(eventId, programId, 'current')
     await setCurrentProgram(eventId, programId)
+    track.programJump()
   }
 
   const base = import.meta.env.BASE_URL
@@ -514,6 +517,7 @@ function EventSettings({
         eventType: type,
         startDate: new Date().toISOString().slice(0, 10),
       })
+      track.eventSave(normalizeEventType(type))
       setSaveState('saved')
       window.setTimeout(() => setSaveState('idle'), 2400)
     } catch (e) {

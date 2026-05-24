@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { DEFAULT_EVENT_ID, isFirebaseConfigured } from '@/lib/firebase'
 import { currentProgram, useEventStore } from '@/store/useEventStore'
 import { normalizeEventType, type Program, type SchoolEvent } from '@/types'
+import { track } from '@/lib/analytics'
 import { AthFooter } from './ControlPage'
 
 export default function DisplayPage() {
@@ -35,6 +36,10 @@ export default function DisplayPage() {
   }
 
   const template = normalizeEventType(event?.eventType ?? 'program_timeline')
+
+  useEffect(() => {
+    if (event?.published) track.displayView(template)
+  }, [event?.published, template])
 
   if (template === 'calling_number') {
     return <CallingNumberDisplay event={event} cur={cur} programs={programs} />
