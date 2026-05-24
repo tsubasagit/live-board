@@ -82,6 +82,84 @@ export default function ControlPage() {
     track.programJump()
   }
 
+  const [seedState, setSeedState] = useState<'idle' | 'loading' | 'done'>('idle')
+
+  const handleLoadSample = async (
+    template: 'program_timeline' | 'calling_number'
+  ) => {
+    const ok = window.confirm(
+      template === 'program_timeline'
+        ? '「プログラム進行型」のサンプル（運動会・6プログラム）を登録します。\n\n・テンプレートを「プログラム進行型」に変更します\n・既存のプログラムに追記します（既存は消えません）\n\n続行しますか？'
+        : '「番号呼び出し型」のサンプル（薬局・6番号）を登録します。\n\n・テンプレートを「番号呼び出し型」に変更します\n・既存のプログラムに追記します（既存は消えません）\n\n続行しますか？'
+    )
+    if (!ok) return
+    setSeedState('loading')
+    try {
+      // 1. イベントタイプを切替＆タイトルを上書き
+      const presetTitle =
+        template === 'program_timeline'
+          ? event?.title || 'サンプル運動会 2026'
+          : event?.title || 'サンプル薬局 受付'
+      const presetLocation =
+        template === 'program_timeline'
+          ? event?.location || '○○小学校 校庭'
+          : event?.location || '○○薬局 待合スペース'
+      const presetDescription =
+        template === 'program_timeline'
+          ? event?.description || '全校児童による春の運動会。応援よろしくお願いします。'
+          : event?.description || '受付番号が表示されたら窓口までお越しください。'
+      await saveEvent({
+        id: eventId,
+        title: presetTitle,
+        description: presetDescription,
+        location: presetLocation,
+        eventType: template,
+        startDate: new Date().toISOString().slice(0, 10),
+      })
+
+      // 2. サンプルプログラム生成
+      const baseOrder = programs.length + 1
+      const samples =
+        template === 'program_timeline'
+          ? [
+              { title: '開会式', description: '校長挨拶・選手宣誓', scheduledStart: '09:30' },
+              { title: 'ラジオ体操', description: '全校児童', scheduledStart: '10:00' },
+              { title: 'かけっこ', description: '1年生', scheduledStart: '10:30' },
+              { title: '玉入れ', description: '2〜3年生', scheduledStart: '11:00' },
+              { title: 'リレー', description: '5〜6年生 代表', scheduledStart: '11:30' },
+              { title: '閉会式', description: '結果発表・表彰', scheduledStart: '12:00' },
+            ]
+          : [
+              { title: '101', description: '受付1', scheduledStart: '' },
+              { title: '102', description: '受付1', scheduledStart: '' },
+              { title: '103', description: '受付2', scheduledStart: '' },
+              { title: '104', description: '受付2', scheduledStart: '' },
+              { title: '105', description: '相談カウンター', scheduledStart: '' },
+              { title: '106', description: '相談カウンター', scheduledStart: '' },
+            ]
+
+      const programsToInsert: Program[] = samples.map((s, i) => ({
+        id: `sample-${template}-${Date.now()}-${i}`,
+        order: baseOrder + i,
+        title: s.title,
+        description: s.description,
+        scheduledStart: s.scheduledStart,
+        scheduledEnd: '',
+        status: 'upcoming',
+      }))
+      await saveProgramsBulk(eventId, programsToInsert)
+
+      track.programAdd('single', programsToInsert.length)
+      track.templateChange(template)
+      setSeedState('done')
+      window.setTimeout(() => setSeedState('idle'), 2400)
+    } catch (e) {
+      console.error('loadSample failed', e)
+      window.alert('サンプル投入に失敗しました。再試行してください。')
+      setSeedState('idle')
+    }
+  }
+
   const base = import.meta.env.BASE_URL
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
@@ -193,6 +271,61 @@ export default function ControlPage() {
               次へ
               <ChevronRight size={20} />
             </button>
+          </div>
+
+          {/* サンプルデータ自動投入 */}
+          <div className="mt-4 pt-4 border-t border-dashed border-slate-300">
+            <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
+              <div>
+                <div className="text-sm font-bold text-slate-700">
+                  🚀 デモ用サンプルデータ
+                </div>
+                <div className="text-xs text-slate-500 mt-0.5">
+                  テンプレートを切り替えて、すぐに動作確認できる初期データを投入します
+                </div>
+              </div>
+              {seedState === 'done' && (
+                <span className="text-sm text-green-700 font-bold animate-pulse">
+                  ✓ サンプルを追加しました
+                </span>
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <button
+                onClick={() => handleLoadSample('program_timeline')}
+                disabled={seedState === 'loading'}
+                className="text-left bg-white hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-500 disabled:opacity-50 disabled:cursor-wait rounded-lg p-3 transition-all"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="text-sm font-bold text-slate-800">
+                    📋 プログラム進行型
+                  </div>
+                  <div className="text-xs text-emerald-600 font-bold">
+                    運動会・式典向け
+                  </div>
+                </div>
+                <div className="text-xs text-slate-500 leading-relaxed">
+                  開会式・かけっこ・玉入れ・リレー・閉会式 など 6プログラム
+                </div>
+              </button>
+              <button
+                onClick={() => handleLoadSample('calling_number')}
+                disabled={seedState === 'loading'}
+                className="text-left bg-white hover:bg-blue-50 border-2 border-slate-200 hover:border-blue-500 disabled:opacity-50 disabled:cursor-wait rounded-lg p-3 transition-all"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="text-sm font-bold text-slate-800">
+                    🔔 番号呼び出し型
+                  </div>
+                  <div className="text-xs text-blue-600 font-bold">
+                    薬局・クリニック向け
+                  </div>
+                </div>
+                <div className="text-xs text-slate-500 leading-relaxed">
+                  101〜106 の受付番号 + 部屋名（受付1/2・相談カウンター）
+                </div>
+              </button>
+            </div>
           </div>
         </section>
 
