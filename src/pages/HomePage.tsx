@@ -294,7 +294,7 @@ export default function HomePage() {
           <div className="text-center text-base text-slate-600 pt-6">
             他にも使えるアイデアがあれば、お気軽に
             <a
-              href="https://forms.apptalenthub.co.jp/contact?utm_source=school-live"
+              href="https://forms.apptalenthub.co.jp/contact?utm_source=school-live&type=other&message=LiveBoard%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%80%82"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#538bb0] hover:underline mx-1 font-semibold"

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>LiveBoard 事例サムネ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: #cfe6fb; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    position: relative;
+    background:
+      radial-gradient(circle at 82% 50%, rgba(0,184,212,0.18), transparent 45%),
+      linear-gradient(135deg, #eef6fc 0%, #dbeefb 55%, #cfe6fb 100%);
+  }
+
+  /* 背景の薄い同心円（ロゴの電波モチーフ） */
+  .waves {
+    position: absolute; right: -120px; top: 50%;
+    transform: translateY(-50%);
+    width: 760px; height: 760px;
+    border-radius: 50%;
+    background:
+      repeating-radial-gradient(circle at center,
+        rgba(0,184,212,0.10) 0px,
+        rgba(0,184,212,0.10) 2px,
+        transparent 2px,
+        transparent 46px);
+    opacity: 0.9;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(29,78,216,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,78,216,0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(90deg, #000 0%, transparent 70%);
+  }
+
+  /* 左カラム：テキスト */
+  .content {
+    position: absolute; left: 70px; top: 64px;
+    width: 640px; z-index: 5;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #1d4ed8; color: #fff;
+    font-weight: 700; font-size: 26px; letter-spacing: 2px;
+    padding: 11px 26px; border-radius: 999px;
+    box-shadow: 0 8px 22px rgba(29,78,216,0.30);
+  }
+  .badge::before {
+    content: "";
+    width: 13px; height: 13px; border-radius: 50%;
+    background: #ff4757;
+    box-shadow: 0 0 0 5px rgba(255,71,87,0.25);
+  }
+  .logo { margin-top: 30px; height: 96px; }
+  .logo img { height: 100%; }
+
+  h1 {
+    margin-top: 26px;
+    font-size: 50px; font-weight: 900; line-height: 1.32;
+    color: #0f2d57; letter-spacing: 0.5px;
+  }
+  h1 .hl {
+    color: #1d4ed8;
+    background: linear-gradient(transparent 62%, rgba(0,184,212,0.32) 62%);
+    padding: 0 4px;
+  }
+  .sub {
+    margin-top: 22px;
+    font-size: 25px; font-weight: 500; color: #41608a; line-height: 1.6;
+  }
+
+  /* マスコット */
+  .mascot {
+    position: absolute; right: 36px; bottom: -6px;
+    width: 430px; z-index: 6;
+    filter: drop-shadow(0 22px 36px rgba(15,45,87,0.28));
+  }
+  .mascot img { width: 100%; border-radius: 36px; }
+
+  /* スピードライン（ラピットくんの疾走感） */
+  .speed { position: absolute; right: 300px; bottom: 150px; z-index: 4; }
+  .speed span {
+    display: block; height: 9px; border-radius: 9px;
+    background: linear-gradient(90deg, transparent, #00b8d4);
+    margin: 16px 0;
+  }
+  .speed span:nth-child(1){ width: 150px; }
+  .speed span:nth-child(2){ width: 220px; }
+  .speed span:nth-child(3){ width: 120px; }
+
+  /* 下部：全端末同期のタグ */
+  .tags {
+    position: absolute; left: 70px; bottom: 52px; z-index: 5;
+    display: flex; gap: 14px;
+  }
+  .tag {
+    background: #fff; color: #1d4ed8;
+    border: 2px solid rgba(29,78,216,0.18);
+    font-weight: 700; font-size: 23px;
+    padding: 9px 22px; border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(15,45,87,0.08);
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="waves"></div>
+
+  <div class="content">
+    <span class="badge">導入事例 / CASE STUDY</span>
+    <div class="logo"><img src="brand/liveboard-logo.png" alt="LiveBoard" /></div>
+    <h1>「いま、何番？」を<br><span class="hl">全端末リアルタイム</span>共有</h1>
+    <p class="sub">運動会・文化祭の進行を、大画面にもスマホにも。<br>アプリ不要、QRで見るだけ。</p>
+  </div>
+
+  <div class="speed"><span></span><span></span><span></span></div>
+  <div class="mascot"><img src="brand/rapittokun.png" alt="ラピットくん" /></div>
+
+  <div class="tags">
+    <span class="tag">⚡ 2秒以内で同期</span>
+    <span class="tag">📱 アプリDL不要</span>
+    <span class="tag">🆓 無料で導入</span>
+  </div>
+</body>
+</html>
